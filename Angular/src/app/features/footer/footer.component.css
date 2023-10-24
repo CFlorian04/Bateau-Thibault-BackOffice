@@ -1,0 +1,13 @@
+  
+/* Style du footer */
+footer {
+    background-color: #333; /* Couleur de fond du footer */
+    color: #fff; /* Couleur du texte du footer */
+    text-align: center; /* Centrer le contenu du footer horizontalement */
+}
+
+/* Style du contenu du footer */
+.footer-content {
+    margin: 0 auto; /* Centre le contenu du footer sur la page */
+}
+  

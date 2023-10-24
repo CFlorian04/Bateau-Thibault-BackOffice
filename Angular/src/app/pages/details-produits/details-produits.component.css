@@ -1,0 +1,55 @@
+/* Styles for the 'Détails Produits' heading */
+h1 {
+  font-size: 24px;
+  text-align: center;
+  transform: translateY(-50%); /* Pour ajuster verticalement */
+}
+
+/* Styles for the type heading (e.g., 'Type A', 'Type B') */
+h2 {
+  font-size: 20px;
+  text-align: center;
+  transform: translateY(-50%); /* Pour ajuster verticalement */
+}
+
+/* Styles for the product list container */
+.productArray {
+  width: fit-content;
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+/* Styles for the table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+/* Styles for table headers */
+th {
+  background-color: #333;
+  color: #fff;
+  text-align: left;
+  padding: 8px;
+}
+
+/* Styles for table data cells */
+td {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+/* Styles for even-numbered rows */
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Styles for odd-numbered rows */
+tr:nth-child(odd) {
+  background-color: #fff;
+}
