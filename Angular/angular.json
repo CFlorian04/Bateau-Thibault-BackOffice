@@ -38,7 +38,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/tp1",
+            "outputPath": "dist/bateau-thibauld-back-office",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -50,7 +50,6 @@
               "src/assets"
             ],
             "styles": [
-              "src/custom-theme.scss",
               "src/styles.css"
             ],
             "scripts": []
@@ -86,10 +85,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "TP1:build:production"
+              "browserTarget": "BateauThibauldBackOffice:build:production"
             },
             "development": {
-              "browserTarget": "TP1:build:development"
+              "browserTarget": "BateauThibauldBackOffice:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -97,7 +96,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "TP1:build"
+            "browserTarget": "BateauThibauldBackOffice:build"
           }
         },
         "test": {
