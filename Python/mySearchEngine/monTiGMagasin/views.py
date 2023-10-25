@@ -116,6 +116,38 @@ def remove_sale(request, id):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+def increment_stock(request, id, number):
+    try:
+        product = InfoProduct.objects.get(tig_id=id)
+    except InfoProduct.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    # Incrémentez la quantité en stock
+    product.quantityInStock += number
+    product.save()
+
+    serializer = InfoProductSerializer(product)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def decrement_stock(request, id, number):
+    try:
+        product = InfoProduct.objects.get(tig_id=id)
+    except InfoProduct.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    # Vérifiez que la quantité en stock est suffisante pour décrémenter
+    if product.quantityInStock >= number:
+        # Décrémentez la quantité en stock
+        product.quantityInStock -= number
+        product.save()
+
+        serializer = InfoProductSerializer(product)
+        return Response(serializer.data)
+    else:
+        return Response({"detail": "Not enough stock to decrement."}, status=status.HTTP_400_BAD_REQUEST)
+
 class ShipPointsList(APIView):
     def get(self, request, format=None):
         response = requests.get(baseUrl + 'shipPoints/')

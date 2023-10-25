@@ -20,4 +20,6 @@ urlpatterns = [
     path('shell/<int:pk>/', views.CoquillageDetail.as_view()),
     path('putonsale/<int:id>/<str:newprice>/', views.put_on_sale), # Nouvelle URL pour mettre en promotion
     path('removesale/<int:id>/', views.remove_sale),  # Nouvelle URL pour retirer de la promotion
+    path('incrementStock/<int:id>/<int:number>/', views.increment_stock),
+    path('decrementStock/<int:id>/<int:number>/', views.decrement_stock),
 ]
