@@ -127,8 +127,19 @@ def increment_stock(request, id, number):
     product.quantityInStock += number
     product.save()
 
+    if 64 > product.quantityInStock >= 16:
+        product.sale = True
+        product.discount = 80
+        product.save()
+
+    elif product.quantityInStock > 64:
+        product.sale = True
+        product.discount = 50
+        product.save()
+
     serializer = InfoProductSerializer(product)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 def decrement_stock(request, id, number):
@@ -141,12 +152,26 @@ def decrement_stock(request, id, number):
     if product.quantityInStock >= number:
         # Décrémentez la quantité en stock
         product.quantityInStock -= number
+
+        if 64 > product.quantityInStock >= 16:
+            product.sale = True
+            product.discount = 80
+
+        elif product.quantityInStock > 64:
+            product.sale = True
+            product.discount = 50
+
+        else:
+            product.sale = False
+            product.discount = 0
+
         product.save()
 
         serializer = InfoProductSerializer(product)
         return Response(serializer.data)
     else:
         return Response({"detail": "Not enough stock to decrement."}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ShipPointsList(APIView):
     def get(self, request, format=None):
