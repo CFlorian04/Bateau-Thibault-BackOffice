@@ -1,5 +1,14 @@
-<app-header></app-header>
-
-<router-outlet></router-outlet>
-
-<app-footer></app-footer>
+<div *ngIf = "this.loginHelper.getConnection() == false; then showLogin; else showApp"></div>
+<ng-template #showLogin>
+    <div>
+        <p>non connecter</p>
+        <!-- <router-outlet name = ''></router-outlet> -->
+        <app-login></app-login>
+    </div>
+</ng-template>
+<ng-template #showApp>
+    <app-header></app-header>
+    <p>connecter</p>
+    <router-outlet></router-outlet>
+    <app-footer></app-footer>
+</ng-template>

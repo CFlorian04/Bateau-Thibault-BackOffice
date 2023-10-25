@@ -10,7 +10,7 @@ export class ProductsService {
   constructor(private http: HttpClient) { }
 
   getProductsFromJson() {
-    return this.http.get<Product[]>("../../../assets/Products.json");
+    return this.http.get<Product[]>("../../../assets/data/Products.json");
   }
 
 }

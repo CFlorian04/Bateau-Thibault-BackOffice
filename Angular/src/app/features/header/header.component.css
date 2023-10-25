@@ -1,53 +1,48 @@
-/* * {
+/* Réinitialisation des styles par défaut */
+body, ul, li {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
-
-header {
-  background-color: #333;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-}
-
-.logo img {
-  max-width: 100px; 
-  height: auto;
-}
-
-nav ul {
   list-style: none;
 }
 
-nav ul li {
-  display: inline;
-  margin-right: 20px;
+/* Style de la barre de navigation */
+header {
+  background-color: #333333; /* Couleur de fond de la barre de navigation */
+  padding: 10px 0; /* Espace autour de la barre de navigation */
+  top: 0px;
+  position: sticky;
+  opacity: 1.0;
+  z-index: 1;
 }
 
-nav ul li:last-child {
-  margin-right: 0;
+ul {
+  display: flex; /* Affichage en ligne pour les éléments de la liste */
+  justify-content: space-between; /* Espacement égal entre les éléments de la liste */
+  padding: 0 20px; /* Espace à gauche et à droite de la liste */
 }
 
-nav a {
-  text-decoration: none;
-  color: #fff;
+li {
+  margin: 0;
+  padding: 0;
 }
 
-@media screen and (max-width: 768px) {
-  header {
-      flex-direction: column;
-      align-items: center;
-  }
+a {
+  text-decoration: none; /* Supprimer la soulignement des liens */
+  color: #fff; /* Couleur du texte des liens */
+  font-size: 16px; /* Augmenter la taille des liens */
+  padding: 10px 20px; /* Espace intérieur des liens */
+  border-radius: 5px; /* Ajouter un peu de bordure arrondie */
+}
 
-  nav ul {
-      margin-top: 10px;
-  }
+/* Style au survol des liens */
+a:hover {
+  text-decoration: underline; /* Souligner les liens au survol */
+}
 
-  nav ul li {
-      display: block;
-      margin-bottom: 10px;
-  }
-} */
+/* Style pour le premier et le dernier lien */
+li:first-child a,
+li:nth-child(2) a,
+li:last-child a {
+  margin: 0; /* Supprimer la marge des bords */
+  background-color: #777; /* Arrière-plan différent pour le deuxième lien */
+}
