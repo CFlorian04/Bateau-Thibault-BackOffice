@@ -13,4 +13,7 @@ export interface Product {
     name: string;
     quantity_stock: number;
     quantity_sold: number;
+
+    toString(): string;
+
 }
