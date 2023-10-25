@@ -14,6 +14,6 @@ export interface Product {
     quantity_stock: number;
     quantity_sold: number;
 
-    toString(): string;
+    discountedPrice: number;
 
 }
