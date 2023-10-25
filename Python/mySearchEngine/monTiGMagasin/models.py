@@ -14,8 +14,10 @@ class InfoProduct(models.Model):
     comments = models.CharField(max_length=100, blank=True, default='')
     owner = models.CharField(max_length=20, blank=True, default='tig_orig')
     quantityInStock = models.IntegerField(default='0')
+    sale = models.BooleanField(default=False)  # Champ pour indiquer si le produit est en vente
+    discount = models.FloatField(default=0.0)
 
-    class Meta:
+class Meta:
         ordering = ('name',)
 
 
