@@ -1,33 +1,41 @@
-<h1>Détails Produits</h1>
+<div class="productArray">
+  
+  <h1>Détails Produits</h1>
+  <button class="button-save" (click)="SaveAllItem()">Save all change</button>
+  <button class="button-save" (click)="getProducts()">Refresh</button>
+  <div *ngFor="let type of sortKeyList" class="productArray">
+    <h2>{{ getProductCategoryName(+type) }}</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Discount Price</th>
+          <th>Discount %</th>
+          <th>Stock</th>
+          <th>Sold</th>
+          <th>Comment</th>
+          <th>Save</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="{{produit.id}}" *ngFor="let produit of sortListeProduits[type]" class="product-row">
+          <td>{{ produit.name }}</td>
+          <td>{{ produit.price }}</td>
+          <td>{{ getDiscountPrice(produit.price, produit.discount) }}</td>
 
-<div *ngFor="let type of sortKeyList" class="productArray">
-  <h2>{{ type }}</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Discount Price</th>
-        <th>Discount %</th>
-        <th>Stock</th>
-        <th>Sold</th>
-        <th>Comment</th>
-        <th>Change Stock</th>
-        <th>Save</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let produit of sortListeProduits[type]" class="product-row">
-        <td>{{ produit.name }}</td>
-        <td>{{ produit.price }}</td>
-        <td>{{ getDiscountPrice(produit.price, produit.discount) }}</td>
-        <td>{{ produit.discount }}</td>
-        <td>{{ produit.quantity_stock }}</td>
-        <td>{{ produit.quantity_sold }}</td>
-        <td>{{ produit.comments }}</td>
-        <td><input id="changeStock" type="number" value="{{ produit.quantity_stock }}"></td>
-        <td><button onclick="saveProductChange(produit.id)">Save</button></td>
-      </tr>
-    </tbody>
-  </table>
+          <!-- <td>{{ produit.discount }}</td> -->
+          <td><input id="discount" type="number" value="{{ produit.discount }}" (change)="saveProductChange(produit.id)"></td>
+
+
+          <!-- <td>{{ produit.quantity_stock }}</td> -->
+          <td><input id="stock" type="number" value="{{ produit.quantity_stock }}" (change)="saveProductChange(produit.id)"></td>
+
+          <td>{{ produit.quantity_sold }}</td>
+          <td>{{ produit.comments }}</td>
+          <td><button (click)="SaveSingleItem(produit.id)">Save</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

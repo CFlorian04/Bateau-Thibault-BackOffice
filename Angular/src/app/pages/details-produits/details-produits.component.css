@@ -53,3 +53,32 @@ tr:nth-child(even) {
 tr:nth-child(odd) {
   background-color: #fff;
 }
+
+input { 
+  width: 40px;
+}
+
+.input-error {
+  background-color: #ff474c;
+}
+
+/* CSS */
+.button-save {
+  background-color: #4CAF50; 
+  color: white; 
+  border: none; 
+  border-radius: 5px; 
+  padding: 10px 20px; 
+  cursor: pointer; 
+  font-size: 16px; 
+}
+
+.button-save:hover {
+  background-color: #45a049;
+}
+
+
+.button-save {
+  display: flex;
+  align-items: center;
+}
