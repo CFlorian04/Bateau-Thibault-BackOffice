@@ -62,6 +62,7 @@ export class DetailsProduitsComponent {
       this.originalListeProduits = cloneDeep(res); // Liste de valeurs original sans modifications
       this.setDataAsDefault(); // Mise des données par défault
       this.sortArrayOfProducts(); // Tri des produits par catégorie
+      this.isSaveAllDisabled = false;
     },
       (err) => {
         alert('Failed loading JSON data');
