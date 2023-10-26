@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8c62c182-c11d-4372-a121-e0856a8ff276" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/migrations/0005_historique_alter_infoproduct_options.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/migrations/0006_historique_date.py" afterDir="false" />
+    <list default="true" id="8c62c182-c11d-4372-a121-e0856a8ff276" name="Changes" comment="Ajout de l'enregistrement dans l'historique d'une modification de stock, affichage de l'historique des modifications d'un objet et des modifications globales">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Python/mySearchEngine/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/Python/mySearchEngine/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/views.py" afterDir="false" />
     </list>
@@ -83,9 +79,22 @@
       <updated>1698155236968</updated>
       <workItem from="1698155237906" duration="4925000" />
     </task>
+    <task id="LOCAL-00001" summary="Ajout de l'enregistrement dans l'historique d'une modification de stock, affichage de l'historique des modifications d'un objet et des modifications globales">
+      <option name="closed" value="true" />
+      <created>1698354356913</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1698354356913</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Ajout de l'enregistrement dans l'historique d'une modification de stock, affichage de l'historique des modifications d'un objet et des modifications globales" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajout de l'enregistrement dans l'historique d'une modification de stock, affichage de l'historique des modifications d'un objet et des modifications globales" />
   </component>
 </project>

@@ -26,4 +26,5 @@ urlpatterns = [
     path('showHistory/', views.afficherHistorique),
     path('showObjectHistory/<int:pid>', views.afficherHistoriqueObjet),
     path('addHistory/<str:data>', views.ajouterHistorique),
+    path('modifyProduct/<str:data>', views.modifierObjet),
 ]

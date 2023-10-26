@@ -236,6 +236,26 @@ def afficherHistoriqueObjet(request, pid):
     return JsonResponse(res, safe=False)
 
 
+@api_view(['GET'])
+def modifierObjet(request, data):
+    data = json.loads(data)
+    try:
+        product = InfoProduct.objects.get(tig_id=data['id'])
+        product.quantityInStock = data['quantityInStock']
+        product.price = data['price']
+        product.save()
+
+    except KeyError as k:
+        logging.getLogger("mylogger").info(f"Une des attendues n'a pas été fournie avec le JSON: {k}")
+        return Response({"Impossible d'enregistrer la modification, car au moins une donnée est manquante"})
+
+    except Exception as e:
+        logging.getLogger("mylogger").info(f"Une erreur est survenue: {e}")
+        return Response({"Impossible d'enregistrer la modification car une erreur est survenue"})
+
+    return Response({"Objet modifié avec succès"})
+
+
 class ShipPointsList(APIView):
     def get(self, request, format=None):
         response = requests.get(baseUrl + 'shipPoints/')
