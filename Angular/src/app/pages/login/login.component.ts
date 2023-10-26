@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit {
     console.log(this.signin.get('email')?.value);
     console.log(this.signin.get('password')?.value);
     this.loginHelper.sendLogin(this.signin.get('email')?.value, this.signin.get('password')?.value);
+    // console.log(AES.encrypt( password, "password").toString());
   }
 
   onSubmit() {

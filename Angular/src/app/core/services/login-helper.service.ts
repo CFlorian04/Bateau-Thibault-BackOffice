@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
+import * as CryptoJS from 'crypto-js';
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +8,8 @@ import { CookieService } from 'ngx-cookie-service';
 export class LoginHelperService {
   private accessToken : string = '';
   private refreshToken : string = '';
+
+  private key = 'sd6g1b8d9f4n6t51ns65b4qe98r6h1db56';
 
   private connected : boolean = false;
 
@@ -42,11 +45,23 @@ export class LoginHelperService {
   deleteAll(){
     this.cookieService.deleteAll();
   }
-   
+  
+  encrypt(str : string) {
+    return CryptoJS.AES.encrypt(str, this.key).toString();
+  }
+  
+  decrypt(encrypted : string) {
+    const decrypted = CryptoJS.AES.decrypt(encrypted, this.key);
+    return decrypted.toString(CryptoJS.enc.Utf8);
+  }
+
   sendLogin(email : string, password : string) {
-    if(email == 'root' && password == 'root') {
+    let crypted = this.encrypt(password).replace(/=$/,'');
+    let decrypted = this.decrypt(crypted);
+    console.log("Crypted = " + crypted);
+    console.log("Decrypted = " + decrypted.toString());
+    if(email == 'root' && password == 'root')
       this.setConnection(true);
-    }
   }
 
   // ngOnInit(): void {

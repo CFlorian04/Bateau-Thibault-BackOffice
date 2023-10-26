@@ -18,6 +18,7 @@ import { LoginHelperService } from './core/services/login-helper.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { HistoryComponent } from './pages/history/history.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { MatInputModule } from '@angular/material/input';
     FooterComponent,
     DetailsProduitsComponent,
     LoginComponent,
+    HistoryComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,7 +38,7 @@ import { MatInputModule } from '@angular/material/input';
     MatToolbarModule,
     MatFormFieldModule,
     ReactiveFormsModule ,
-    MatInputModule
+    MatInputModule,
   ],
   providers: [HttpClient, ProductsService, CookieService, LoginHelperService],
   bootstrap: [AppComponent]

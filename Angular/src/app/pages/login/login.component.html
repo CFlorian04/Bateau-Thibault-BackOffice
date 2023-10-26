@@ -1,18 +1,19 @@
-<!-- <button (click)="setConnection()">Click to connect</button> -->
-<form [formGroup]="signin">
-    <mat-form-field class="example-full-width">
-        <mat-label>Adresse Email</mat-label>
-        <input matInput placeholder="exemple@domain.fr"  formControlName="email" style="height: 35px;">
+<body>
+    <form [formGroup]="signin">
+        <mat-form-field class="example-full-width">
+            <mat-label>Adresse Email</mat-label>
+        <input matInput placeholder="exemple@domain.fr"  formControlName="email">
     </mat-form-field>
     <span *ngIf="signin.hasError('email', 'email') && signin.get('email')!.touched">
-        Please enter the correct email, this email not valid.
+        Veuillez entrer une adresse Email valide.
     </span>
-</form>
-<form [formGroup]="signin">
-    <mat-form-field>
-        <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'" formControlName="password" required>
-        <mat-icon style="font-family: 'Material Icons'" matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-        <mat-hint *ngIf="!this.signin.get('password')!.value">Enter your password</mat-hint>
-    </mat-form-field>
-</form>
-<button mat-raised-button (click)="setConnection()">Connexion</button>
+    </form>
+    <form [formGroup]="signin">
+        <mat-form-field>
+            <input matInput placeholder="Mot de passe" [type]="hide ? 'password' : 'text'" formControlName="password" required>
+            <mat-icon style="font-family: 'Material Icons'" matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <mat-hint *ngIf="!this.signin.get('password')!.value">Entrer votre mot de passe</mat-hint>
+        </mat-form-field>
+    </form>
+    <button mat-raised-button (click)="setConnection()">Connexion</button>
+</body>
