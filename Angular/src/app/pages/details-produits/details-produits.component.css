@@ -40,6 +40,7 @@ th {
 
 /* Styles for table data cells */
 td {
+  width: fit-content;
   padding: 8px;
   border: 1px solid #ddd;
 }
@@ -62,6 +63,20 @@ input {
   background-color: #ff474c;
 }
 
+.associate-column input,
+.associate-column p {
+  display: inline-block;
+  margin: 0; /* Pour supprimer les marges par défaut */
+}
+
+.associate-column p {
+  font-size: 15px;
+  font-style: italic;
+  margin-left: 5px;
+}
+
+
+
 /* CSS */
 .button-save {
   background-color: #4CAF50; 
@@ -71,10 +86,16 @@ input {
   padding: 10px 20px; 
   cursor: pointer; 
   font-size: 16px; 
+  margin: 5px;
 }
 
 .button-save:hover {
   background-color: #45a049;
+}
+
+.button-save:disabled {
+  background-color: #5d615d;
+  color: rgb(0, 0, 0);
 }
 
 

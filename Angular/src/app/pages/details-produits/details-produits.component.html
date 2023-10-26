@@ -1,8 +1,9 @@
 <div class="productArray">
   
   <h1>Détails Produits</h1>
-  <button class="button-save" (click)="SaveAllItem()">Save all change</button>
+  <button id="button_save_all" class="button-save" (click)="SaveItems()" [disabled]="isSaveAllDisabled">Save all change</button>
   <button class="button-save" (click)="getProducts()">Refresh</button>
+  <!--Boucle sur toutes les catégories de produits-->
   <div *ngFor="let type of sortKeyList" class="productArray">
     <h2>{{ getProductCategoryName(+type) }}</h2>
     <table>
@@ -13,27 +14,31 @@
           <th>Discount Price</th>
           <th>Discount %</th>
           <th>Stock</th>
+          <th>Associate price</th>
           <th>Sold</th>
           <th>Comment</th>
           <th>Save</th>
         </tr>
       </thead>
       <tbody>
+        <!--Boucle sur toutes les produits par catégories-->
         <tr id="{{produit.id}}" *ngFor="let produit of sortListeProduits[type]" class="product-row">
           <td>{{ produit.name }}</td>
           <td>{{ produit.price }}</td>
-          <td>{{ getDiscountPrice(produit.price, produit.discount) }}</td>
-
-          <!-- <td>{{ produit.discount }}</td> -->
-          <td><input id="discount" type="number" value="{{ produit.discount }}" (change)="saveProductChange(produit.id)"></td>
-
-
-          <!-- <td>{{ produit.quantity_stock }}</td> -->
-          <td><input id="stock" type="number" value="{{ produit.quantity_stock }}" (change)="saveProductChange(produit.id)"></td>
-
+          <td>{{ produit.discounted_price }}</td>
+          <td>
+            <input class="discount" type="number" min="0" max="100" value="{{ produit.discount }}" (change)="saveProductChange(produit.id)">
+          </td>
+          <td>
+            <input class="stock" type="number" min="0" value="{{ produit.quantity_stock }}" (change)="saveProductChange(produit.id)">
+          </td>
+          <td class="associate-column">
+            <input class="associate-price" type="number" min="0" value="0" (change)="saveProductChange(produit.id)">
+            <p class="associate-price-text"></p>
+          </td>
           <td>{{ produit.quantity_sold }}</td>
           <td>{{ produit.comments }}</td>
-          <td><button (click)="SaveSingleItem(produit.id)">Save</button></td>
+          <td class="button_save_row"><button class="button-save" (click)="SaveItems(produit.id)">Save</button></td>
         </tr>
       </tbody>
     </table>
