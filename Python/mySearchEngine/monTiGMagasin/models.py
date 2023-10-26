@@ -1,4 +1,6 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+
 
 # Create your models here.
 class InfoProduct(models.Model):
@@ -10,16 +12,13 @@ class InfoProduct(models.Model):
     unit = models.CharField(max_length=20, blank=True, default='')
     availability = models.BooleanField(default=True)
     sale = models.BooleanField(default=False)
-    discount = models.FloatField(default='0')
+    discount = models.FloatField(default=0.0)
     comments = models.CharField(max_length=100, blank=True, default='')
     owner = models.CharField(max_length=20, blank=True, default='tig_orig')
     quantityInStock = models.IntegerField(default='0')
-    sale = models.BooleanField(default=False)  # Champ pour indiquer si le produit est en vente
-    discount = models.FloatField(default=0.0)
 
-class Meta:
+    class Meta:
         ordering = ('name',)
-
 
 
 # Doc: FROM OLD FILES
@@ -61,3 +60,18 @@ class Coquillage(models.Model):
 
     class Meta:
         ordering = ('tigID',)
+
+
+class Historique(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    tigID = models.IntegerField(default='-1')
+
+    diff_stock = models.IntegerField(default='-1')
+
+    class Meta:
+        ordering = ('created',)
+
+
+# class CustomUser(AbstractUser):
+#     bio = models.CharField(max_length=255, blank=True)
+    # cover_photo = models.ImageField(upload_to='covers/', null=True, blank=True)

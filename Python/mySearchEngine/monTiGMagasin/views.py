@@ -153,10 +153,13 @@ def decrement_stock(request, id, number):
         # Décrémentez la quantité en stock
         product.quantityInStock -= number
 
+        # Todo: vérifier
         if 64 > product.quantityInStock >= 16:
             product.sale = True
+            # Je crois que c'est plutôt 80% du prix soit 20% de réduction
             product.discount = 80
 
+            # 50% du prix soit 50% de réduction
         elif product.quantityInStock > 64:
             product.sale = True
             product.discount = 50
@@ -169,6 +172,7 @@ def decrement_stock(request, id, number):
 
         serializer = InfoProductSerializer(product)
         return Response(serializer.data)
+
     else:
         return Response({"detail": "Not enough stock to decrement."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -179,9 +183,6 @@ class ShipPointsList(APIView):
         jsondata = response.json()
         return Response(jsondata)
 
-#    def post(self, request, format=None):
-#        NO DEFITION of post --> server will return "405 NOT ALLOWED"
-
 
 class RedirectionShipPointDetail(APIView):
     def get(self, request, pk, format=None):
@@ -191,11 +192,6 @@ class RedirectionShipPointDetail(APIView):
             return Response(jsondata)
         except:
             raise Http404
-
-#    def put(self, request, pk, format=None):
-#        NO DEFITION of put --> server will return "405 NOT ALLOWED"
-#    def delete(self, request, pk, format=None):
-#        NO DEFITION of delete --> server will return "405 NOT ALLOWED"
 
 
 class AvailableProducts(APIView):
@@ -325,3 +321,18 @@ class CoquillageDetail(APIView):
 
     #    def post(self, request, format=None):
     #        NO DEFINITION of post --> server will return "405 NOT ALLOWED"
+
+
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+
+
+# @api_view(['GET'])
+# def create_user(request):
+#     # Création d'un nouvel utilisateur
+#     new_user = User.objects.create_user(username='TestUser', password='Test', email='test@test.com')
+#
+#     # Enregistrement de l'utilisateur dans la base de données
+#     new_user.save()
+#
+#     return HttpResponse('Utilisateur créé avec succès')
