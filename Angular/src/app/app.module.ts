@@ -11,6 +11,14 @@ import { FooterComponent } from './features/footer/footer.component';
 import { DetailsProduitsComponent } from './pages/details-produits/details-produits.component';
 import { ProductsService } from './core/services/products.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoginComponent } from './pages/login/login.component';
+import { MatToolbarModule } from '@angular/material/toolbar'
+import { CookieService } from 'ngx-cookie-service';
+import { LoginHelperService } from './core/services/login-helper.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { HistoryComponent } from './pages/history/history.component';
 
 @NgModule({
   declarations: [
@@ -18,15 +26,21 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HomeComponent,
     HeaderComponent,
     FooterComponent,
-    DetailsProduitsComponent
+    DetailsProduitsComponent,
+    LoginComponent,
+    HistoryComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatFormFieldModule,
+    ReactiveFormsModule ,
+    MatInputModule,
   ],
-  providers: [HttpClient, ProductsService],
+  providers: [HttpClient, ProductsService, CookieService, LoginHelperService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

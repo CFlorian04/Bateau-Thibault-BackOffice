@@ -1,8 +1,17 @@
+import logging
 import requests
+
+from django.http import Http404
+from django.http import JsonResponse
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
 from mytig.config import baseUrl
-import logging
+from mytig.models import ProduitEnPromotion, ProduitDisponible, Poisson, Crustacean, Coquillage
+from mytig.serializers import (ProduitEnPromotionSerializer, AvailableProductSerializer,
+                               PoissonsSerializer, CrustaceansSerializer,
+                               CoquillagesSerializer)
 
 
 # Create your views here.
@@ -28,11 +37,6 @@ class RedirectionDetailProduit(APIView):
 #    def delete(self, request, pk, format=None):
 #        NO DEFITION of delete --> server will return "405 NOT ALLOWED"
 
-
-from mytig.models import ProduitEnPromotion, ProduitDisponible
-from mytig.serializers import ProduitEnPromotionSerializer, AvailableProductSerializer
-from django.http import Http404
-from django.http import JsonResponse
 
 
 class PromoList(APIView):
@@ -133,3 +137,89 @@ class AvailableProductDetail(APIView):
     #    def post(self, request, format=None):
     #        NO DEFINITION of post --> server will return "405 NOT ALLOWED"
 
+
+class PoissonsListe(APIView):
+    def get(self, request, format=None):
+        res = []
+        for prod in Poisson.objects.all():
+            serializer = PoissonsSerializer(prod)
+            response = requests.get(baseUrl+'product/'+str(serializer.data['tigID'])+'/')
+            jsondata = response.json()
+            res.append(jsondata)
+        return JsonResponse(res, safe=False)
+
+
+class PoissonDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return Poisson.objects.get(pk=pk)
+        except Poisson.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        prod = self.get_object(pk)
+        serializer = PoissonsSerializer(prod)
+        response = requests.get(baseUrl+'product/'+str(serializer.data['tigID'])+'/')
+        jsondata = response.json()
+        return Response(jsondata)
+
+    #    def post(self, request, format=None):
+    #        NO DEFINITION of post --> server will return "405 NOT ALLOWED"
+
+
+class CrustaceanListe(APIView):
+    def get(self, request, format=None):
+        res = []
+        for prod in Crustacean.objects.all():
+            serializer = CrustaceansSerializer(prod)
+            response = requests.get(baseUrl+'product/'+str(serializer.data['tigID'])+'/')
+            jsondata = response.json()
+            res.append(jsondata)
+        return JsonResponse(res, safe=False)
+
+
+class CrustaceanDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return Crustacean.objects.get(pk=pk)
+        except Crustacean.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        prod = self.get_object(pk)
+        serializer = CrustaceansSerializer(prod)
+        response = requests.get(baseUrl+'product/'+str(serializer.data['tigID'])+'/')
+        jsondata = response.json()
+        return Response(jsondata)
+
+    #    def post(self, request, format=None):
+    #        NO DEFINITION of post --> server will return "405 NOT ALLOWED"
+
+
+class CoquillageListe(APIView):
+    def get(self, request, format=None):
+        res = []
+        for prod in Coquillage.objects.all():
+            serializer = CoquillagesSerializer(prod)
+            response = requests.get(baseUrl+'product/'+str(serializer.data['tigID'])+'/')
+            jsondata = response.json()
+            res.append(jsondata)
+        return JsonResponse(res, safe=False)
+
+
+class CoquillageDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return Coquillage.objects.get(pk=pk)
+        except Coquillage.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        prod = self.get_object(pk)
+        serializer = CoquillagesSerializer(prod)
+        response = requests.get(baseUrl+'product/'+str(serializer.data['tigID'])+'/')
+        jsondata = response.json()
+        return Response(jsondata)
+
+    #    def post(self, request, format=None):
+    #        NO DEFINITION of post --> server will return "405 NOT ALLOWED"
