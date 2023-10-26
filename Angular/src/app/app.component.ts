@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoginHelperService } from './core/services/login-helper.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'TP1';
+
+  constructor(public loginHelper : LoginHelperService) {
+  }
 }

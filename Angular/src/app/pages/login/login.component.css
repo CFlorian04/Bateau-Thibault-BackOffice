@@ -1,0 +1,69 @@
+/* Centrer le formulaire au milieu de la page */
+body {
+    /* display: flex;
+    height: 300px;
+    background-color: #ff1124;
+    justify-content: center;
+    align-items: center;
+    margin: 0; */
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    margin-top: -50px;
+    margin-left: -50px;
+    width: 100px;
+    height: 100px;
+
+    /* height: 100vh;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    background-color: #f4f4f4; */
+}
+
+/* Style pour le formulaire */
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 300px; /* Largeur du formulaire */
+    margin-bottom: 15px;
+}
+
+/* Style pour les étiquettes et les champs de saisie */
+mat-label {
+    font-weight: bold;
+    color: #333;
+    text-align: left; /* Aligner le texte à gauche */
+}
+
+mat-form-field {
+    margin: 20px 0;
+    width: 100%;
+    text-align: left; /* Aligner le champ de saisie à gauche */
+}
+
+/* Style pour le bouton de connexion */
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px; /* Taille réduite du bouton */
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    margin: 0 auto; /* Centrer horizontalement */
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Style pour les messages d'erreur */
+span {
+    color: #ff0000;
+    font-size: 14px;
+}
