@@ -1,11 +1,17 @@
 from rest_framework.serializers import ModelSerializer
-from monTiGMagasin.models import InfoProduct, ProduitEnPromotion, ProduitDisponible, Poisson, Crustacean, Coquillage
+from monTiGMagasin.models import InfoProduct, ProduitEnPromotion, ProduitDisponible, Poisson, Crustacean, Coquillage, Historique
+
 
 class InfoProductSerializer(ModelSerializer):
     class Meta:
         model = InfoProduct
         fields = ('id', 'tig_id', 'name', 'category', 'price', 'unit', 'availability', 'sale', 'discount', 'comments', 'owner', 'quantityInStock')
 
+
+class HistoriqueSerializer(ModelSerializer):
+    class Meta:
+        model = Historique
+        fields = ('tigID', 'stock_change', 'price', 'date')
 
 
 # Doc: FROM OLD FILES

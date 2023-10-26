@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8c62c182-c11d-4372-a121-e0856a8ff276" name="Changes" comment="" />
+    <list default="true" id="8c62c182-c11d-4372-a121-e0856a8ff276" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/migrations/0005_historique_alter_infoproduct_options.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/migrations/0006_historique_date.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Python/mySearchEngine/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/Python/mySearchEngine/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Python/mySearchEngine/monTiGMagasin/views.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,29 +25,54 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 8
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="2XDEQZfR65YMv7yNe9wK5F42m0M" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Hanane/Documents/GitHub/Bateau-Thibault-BackOffice",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Jarvis/Documents/GitHub/Bateau-Thibault-BackOffice/Python/main.py&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RunManager">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="Bateau-Thibault-BackOffice" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\Jarvis\Documents\GitHub\Bateau-Thibault-BackOffice\Python\myTidyVEnv\Scripts\python.exe" />
+      <option name="SDK_NAME" value="Python 3.12 (Bateau-Thibault-BackOffice)" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Python" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Python/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
