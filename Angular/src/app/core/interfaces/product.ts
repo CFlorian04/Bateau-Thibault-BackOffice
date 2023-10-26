@@ -14,6 +14,7 @@ export interface Product {
     quantity_stock: number;
     quantity_sold: number;
 
-    discountedPrice: number;
+    discounted_price: number; // Prix avec réduction
+    associate_price: number; // Prix associer à un changement de stock
 
 }

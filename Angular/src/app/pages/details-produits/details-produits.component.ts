@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { cloneDeep } from 'lodash';
 import { Product } from 'src/app/core/interfaces/product';
 import { ProductsService } from 'src/app/core/services/products.service';
@@ -21,7 +22,10 @@ export class DetailsProduitsComponent {
 
   listeTransaction!: number[][]; // Liste des transactions faites (par rapport au stock et au prix associé)
 
-  constructor(public productsService: ProductsService) {}
+  isSaveAllDisabled: boolean = false;
+
+
+  constructor(public productsService: ProductsService) { }
 
   /**
   * Récupère la liste des produits du service 'Products'.
@@ -30,7 +34,7 @@ export class DetailsProduitsComponent {
   * @returns Description de la valeur de retour.
   * @autre_actions 
   * - Stockage des valeurs original (sans modification) => 'originalListeProduits'
-  * - Calcul des prix avec réductions => calculateDiscountedPrices()
+  * - Mise des données par défault => setDataAsDefault()
   * - Tri des produits en fonction de leur catégorie => sortArrayOfProducts()
   */
 
@@ -44,7 +48,7 @@ export class DetailsProduitsComponent {
   * @returns Pas de retour
   * @autre_actions
   * - Stockage des valeurs original (sans modification) => originalListeProduits[ ]
-  * - Calcul des prix avec réductions => calculateDiscountedPrices()
+  * - Mise des données par défault => setDataAsDefault()
   * - Tri des produits en fonction de leur catégorie => sortArrayOfProducts()
   */
   getProducts() {
@@ -55,7 +59,7 @@ export class DetailsProduitsComponent {
     this.productsService.getProductsFromJson().subscribe((res: Product[]) => {
       this.listeProduits = res;
       this.originalListeProduits = cloneDeep(res); // Liste de valeurs original sans modifications
-      this.calculateDiscountedPrices(); // Calcul de tous les prix avec réductions
+      this.setDataAsDefault(); // Mise des données par défault
       this.sortArrayOfProducts(); // Tri des produits par catégorie
     },
       (err) => {
@@ -64,12 +68,13 @@ export class DetailsProduitsComponent {
   }
 
   /**
-  * Attribue les prix avec réduction sur toute la liste de produits.
+  * Mise des données par défault sur toute la liste de produits.
   * @returns Pas de retour
   */
-  calculateDiscountedPrices() {
+  setDataAsDefault() {
     for (const product of this.listeProduits) {
-      product.discountedPrice = this.getDiscountPrice(product.price, product.discount);
+      product.discounted_price = this.getDiscountPrice(product.price, product.discount);
+      product.associate_price = 0;
     }
   }
 
@@ -119,6 +124,15 @@ export class DetailsProduitsComponent {
     this.sortKeyList = Object.keys(this.sortListeProduits);
   }
 
+  /**
+  * Met à jour les produits dans la liste listeProduits[ ]
+  * @param id - id du produit à mettre à jour
+  * @returns Pas de retour
+  * @autre_actions 
+  * - Stockage l'id si produit différent de l'original => listeIDProduitUpdate[ ]
+  * - Ajoute du CSS si la valeur de l'input est incorrect
+  * - Met à jour la valeur du prix avec réduction
+  */
   saveProductChange(changeID: number) {
     const ProductRow = document.getElementById(changeID.toString());
 
@@ -126,70 +140,132 @@ export class DetailsProduitsComponent {
 
       const updateProduct = this.getProduit(changeID);
       const originalProduct = this.getOriginalProduit(changeID);
+
+      let discountInputElement = ProductRow.querySelector(".discount") as HTMLInputElement;
+      let associatePriceInputElement = ProductRow.querySelector(".associate-price") as HTMLInputElement;
+      let stockInputElement = ProductRow.querySelector(".stock") as HTMLInputElement;
+      let associate_price_text = ProductRow.querySelector(".associate-price-text") as HTMLParagraphElement;
+      let button_save = ProductRow.querySelector(".button_save_row > .button-save") as HTMLButtonElement;
+
       let hasChanged = false;
+      let hasError_local = false;
 
       if (updateProduct && originalProduct) {
 
+        // Modification de la valeur du discount
+        if (discountInputElement) {
+          if (+discountInputElement.value >= 0 && +discountInputElement.value <= 100) { // Règle d'affichage d'erreur
+            discountInputElement.classList.remove("input-error");
+            if (originalProduct.discount != +discountInputElement.value) {
+              updateProduct.discount = +discountInputElement.value;
+              updateProduct.discounted_price = this.getDiscountPrice(updateProduct.price, updateProduct.discount);
+              hasChanged = true;
+            }
+          } else {
+            discountInputElement.classList.add("input-error");
+            hasError_local = true;
+          }
+        }
+
+
+        // Récupération de la valeur de transaction, si le stock est différent de celui de base
+        if (associatePriceInputElement) {
+          if (+associatePriceInputElement.value >= 0) {
+            associatePriceInputElement.classList.remove("input-error");
+            updateProduct.associate_price = +associatePriceInputElement.value;
+            // Pas de hasChanged = true car cette valeur dépend du changement de stock
+          } else {
+            associatePriceInputElement.classList.add("input-error");
+            hasError_local = true;
+          }
+        }
+
         // Modification de la valeur du stock
-        let stockInputElement = ProductRow.querySelector(".stock") as HTMLInputElement;
         if (stockInputElement) {
           if (+stockInputElement.value >= 0) { // Règle d'affichage d'erreur
             stockInputElement.classList.remove("input-error");
             if (originalProduct.quantity_stock != +stockInputElement.value) {
               updateProduct.quantity_stock = +stockInputElement.value;
               hasChanged = true;
-              // Récupération de la valeur de transaction, si le stock est différent de celui de base
-              let associatePrice = ProductRow.querySelector(".associate-price") as HTMLInputElement;
-              if (associatePrice) {
-                null;
+              associatePriceInputElement.classList.remove("input-error");
+              let changeValue = +stockInputElement.value - originalProduct.quantity_stock
+              if (+associatePriceInputElement.value == 0 && changeValue < 0) {
+                associate_price_text.innerText = 'invendu (' + changeValue + ')';
+              } else if (+associatePriceInputElement.value > 0 && changeValue < 0) {
+                associate_price_text.innerText = 'vente (' + changeValue + ')';
+              } else if (+associatePriceInputElement.value > 0 && changeValue > 0) {
+                associate_price_text.innerText = 'achat (+' + changeValue + ')';
               } else {
-                stockInputElement.classList.add("input-error");
-              }
-
-            }
-          }
-
-          // Modification de la valeur du discount
-          let discountInputElement = ProductRow.querySelector(".discount") as HTMLInputElement;
-          if (discountInputElement) {
-            if (+discountInputElement.value >= 0 && +discountInputElement.value <= 100) { // Règle d'affichage d'erreur
-              discountInputElement.classList.remove("input-error");
-              if (originalProduct.discount != +discountInputElement.value) {
-                updateProduct.discount = +discountInputElement.value;
-                updateProduct.discountedPrice = this.getDiscountPrice(updateProduct.price, updateProduct.discount);
-                console.log(this.getDiscountPrice(updateProduct.price, updateProduct.discount))
-                console.log(updateProduct.discountedPrice);
-                hasChanged = true;
+                // Ne correspond pas à quelque chose de possible
+                associate_price_text.innerText = 'erreur';
+                associatePriceInputElement.classList.add("input-error");
+                hasError_local = true;
               }
             } else {
-              discountInputElement.classList.add("input-error");
+              associate_price_text.innerText = '';
             }
+          } else {
+            stockInputElement.classList.add("input-error");
+            hasError_local = true;
           }
         }
 
         hasChanged ? this.setProduitsUpdate(changeID) : this.removeProduitsUpdate(changeID);
+        hasError_local ? button_save?.setAttribute('disabled', '') : button_save?.removeAttribute('disabled');
+
+        this.updateSaveAllButton()
 
         // console.log("sortListeProduits");
         // console.log(this.sortListeProduits[updateProduct?.category].find(e => e.id === changeID));
 
       }
-      console.log("listeProduits");
-      console.log("Discount : " + this.listeProduits.find(e => e.id === changeID)?.discount);
-      console.log("Discount Price : " + this.listeProduits.find(e => e.id === changeID)?.discountedPrice);
+
+      // console.log("Associate Price : " + this.listeProduits.find(e => e.id === changeID)?.associate_price)
+      // console.log("Discount : " + this.listeProduits.find(e => e.id === changeID)?.discount);
+      // console.log("Discount Price : " + this.listeProduits.find(e => e.id === changeID)?.discounted_price);
 
     }
   }
 
+  updateSaveAllButton() {
+    this.isSaveAllDisabled = false;
+    this.originalListeProduits.forEach(e => {
+      let ProductRow = document.getElementById(e.id.toString());
+      if (ProductRow) {
+        let button_save = ProductRow.querySelector(".button_save_row > .button-save") as HTMLButtonElement;
+        if (button_save['disabled'] == true) {
+          this.isSaveAllDisabled = true;
+          return;
+        }
+      }
+
+    });
+    //console.log(this.isSaveAllDisabled);
+  }
+
+  /**
+  * Récupère le nom de la catégorie
+  * @param category - Numéro  de la catégorie
+  * @returns type: string
+  */
   getProductCategoryName(category: number) {
     return this.productsService.getProductCategoryName(category);
   }
 
+  /**
+  * Ajoute le produit dans la liste listeIDProduitUpdate[ ]
+  * @param id - id du produit à ajouter
+  */
   setProduitsUpdate(productID: number) {
     if (!this.listeIDProduitUpdate.includes(productID)) {
       this.listeIDProduitUpdate.push(productID);
     }
   }
 
+  /**
+  * Retire le produit dans la liste listeIDProduitUpdate[ ]
+  * @param id - id du produit à retirer
+  */
   removeProduitsUpdate(productID: number) {
     const index = this.listeIDProduitUpdate.indexOf(productID);
 
@@ -198,55 +274,79 @@ export class DetailsProduitsComponent {
     }
   }
 
+  /**
+  * Envoi les modifications de tous les produits au serveur
+  * @param id - (optionnel) id du produit à sauvegarder
+  * @autre_actions Suppression de tous les ids dans listeIDProduitUpdate[ ]
+  */
+  SaveItems(optionalID?: number) {
 
-  SaveAllItem() {
     let updatedProducts: Product[] = [];
 
-    this.listeIDProduitUpdate.forEach(itemId => {
-      let updatedProduct = this.listeProduits.find(product => product.id === itemId);
+    if (typeof optionalID !== undefined) {
+      this.listeIDProduitUpdate.forEach(itemId => {
+        let updatedProduct = this.listeProduits.find(product => product.id === itemId);
+        if (updatedProduct) {
+          updatedProducts.push(updatedProduct);
+        }
+      });
+      this.sendTransactions();
+    } else {
+      let updatedProduct = this.listeProduits.find(product => product.id === optionalID);
       if (updatedProduct) {
         updatedProducts.push(updatedProduct);
       }
-    });
+      this.sendTransactions(optionalID);
+    }
+
 
     if (updatedProducts.length > 0) {
       let json = JSON.stringify(updatedProducts);
       this.productsService.saveProductsChanges(json);
       this.listeIDProduitUpdate = [];
 
-      console.log("Sauvegarde de toutes les modifications de produits");
+      //console.log("Sauvegarde de toutes les modifications de produits");
       console.log(json);
-    }
 
-    console.log(this.listeIDProduitUpdate);
+    }
   }
 
 
+  sendTransactions(optionalID?: number) {
 
-  SaveSingleItem(productID: number) {
-    let updatedProducts: Product[] = [];
+    let updateTransactions: { id_product: number, stock_change: number, price: number }[] = [];
 
-    let updatedProduct = this.listeProduits.find(product => product.id === productID);
-    if (updatedProduct) {
-      updatedProducts.push(updatedProduct);
-      let index = this.listeIDProduitUpdate.indexOf(productID);
-      if (index !== -1) {
-        this.listeIDProduitUpdate.splice(index, 1);
+    if (typeof optionalID !== undefined) {
+      this.listeIDProduitUpdate.forEach(itemId => {
+        let updatedTransa = this.listeProduits.find(product => product.id === itemId);
+        let originalProduct = this.originalListeProduits.find(product => product.id === itemId);
+
+        if (updatedTransa && originalProduct) {
+          let Trans = { "id_product": updatedTransa.id, "stock_change": (updatedTransa.quantity_stock - originalProduct?.quantity_stock), "price": updatedTransa.associate_price }
+          updateTransactions.push(Trans);
+        }
+      });
+    } else {
+      let updatedTransa = this.listeProduits.find(product => product.id === optionalID);
+      let originalProduct = this.originalListeProduits.find(product => product.id === optionalID);
+
+      if (updatedTransa && originalProduct) {
+        let Trans = { "id_product": updatedTransa.id, "stock_change": (originalProduct?.quantity_stock - updatedTransa.quantity_stock), "price": updatedTransa.associate_price }
+        updateTransactions.push(Trans);
       }
     }
 
-    if (updatedProducts.length > 0) {
-      let json = JSON.stringify(updatedProducts);
-      this.productsService.saveProductsChanges(json);
 
-      console.log("Sauvegarde du produit : id " + productID);
+    if (updateTransactions.length > 0) {
+      let json = JSON.stringify(updateTransactions);
+      this.productsService.saveProductsChanges(json);
+      this.listeIDProduitUpdate = [];
+
+      //console.log("Sauvegarde de toutes les modifications de produits");
       console.log(json);
     }
-    console.log(this.listeIDProduitUpdate);
-
 
   }
-
 
 
 }
