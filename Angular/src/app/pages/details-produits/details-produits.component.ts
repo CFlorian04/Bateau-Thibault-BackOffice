@@ -283,20 +283,22 @@ export class DetailsProduitsComponent {
   */
   SaveItems(optionalID?: number) {
 
-    let updatedProducts: Product[] = [];
+    // let updatedProducts: Product[] = [];
+
+    let updatedProducts: { id: number, quantityInStock: number, price: number }[] = [];
 
     if (typeof optionalID !== undefined) {
       this.listeIDProduitUpdate.forEach(itemId => {
         let updatedProduct = this.listeProduits.find(product => product.id === itemId);
         if (updatedProduct) {
-          updatedProducts.push(updatedProduct);
+          updatedProducts.push({ id: updatedProduct.id, quantityInStock: updatedProduct.quantityInStock, price: updatedProduct.price });
         }
       });
       this.sendTransactions();
     } else {
       let updatedProduct = this.listeProduits.find(product => product.id === optionalID);
       if (updatedProduct) {
-        updatedProducts.push(updatedProduct);
+        updatedProducts.push({ id: updatedProduct.id, quantityInStock: updatedProduct.quantityInStock, price: updatedProduct.price });
       }
       this.sendTransactions(optionalID);
     }
@@ -316,7 +318,9 @@ export class DetailsProduitsComponent {
 
   sendTransactions(optionalID?: number) {
 
-    let updateTransactions: { id_product: number, stock_change: number, price: number }[] = [];
+    // let updateTransactions: { id_product: number, stock_change: number, price: number }[] = [];
+    let updateTransactions: { id: number, stock_change: number, price: number }[] = [];
+
 
     if (typeof optionalID !== undefined) {
       this.listeIDProduitUpdate.forEach(itemId => {
@@ -324,8 +328,7 @@ export class DetailsProduitsComponent {
         let originalProduct = this.originalListeProduits.find(product => product.id === itemId);
 
         if (updatedTransa && originalProduct) {
-          let Trans = { "id_product": updatedTransa.id, "stock_change": (updatedTransa.quantityInStock - originalProduct?.quantityInStock), "price": updatedTransa.associate_price }
-          updateTransactions.push(Trans);
+          updateTransactions.push({ id: updatedTransa.id, stock_change: updatedTransa.quantityInStock-originalProduct.quantityInStock, price: updatedTransa.price });;
         }
       });
     } else {
@@ -333,8 +336,7 @@ export class DetailsProduitsComponent {
       let originalProduct = this.originalListeProduits.find(product => product.id === optionalID);
 
       if (updatedTransa && originalProduct) {
-        let Trans = { "id_product": updatedTransa.id, "stock_change": (originalProduct?.quantityInStock - updatedTransa.quantityInStock), "price": updatedTransa.associate_price }
-        updateTransactions.push(Trans);
+        updateTransactions.push({ id: updatedTransa.id, stock_change: updatedTransa.quantityInStock-originalProduct.quantityInStock, price: updatedTransa.price });;
       }
     }
 
