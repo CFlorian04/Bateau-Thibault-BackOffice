@@ -55,8 +55,9 @@ export class DetailsProduitsComponent {
 
     this.listeProduits = [];
 
-    // this.productsService.getJSONDataFromServer("ListProducts").subscribe((res: Product[]) => {
-    this.productsService.getProductsFromJson().subscribe((res: Product[]) => {
+    this.productsService.getJSONDataFromServer("InfoProducts").subscribe((res: Product[]) => {
+    // this.productsService.getProductsFromJson().subscribe((res: Product[]) => {
+      console.log(res);
       this.listeProduits = res;
       this.originalListeProduits = cloneDeep(res); // Liste de valeurs original sans modifications
       this.setDataAsDefault(); // Mise des données par défault
@@ -184,11 +185,11 @@ export class DetailsProduitsComponent {
         if (stockInputElement) {
           if (+stockInputElement.value >= 0) { // Règle d'affichage d'erreur
             stockInputElement.classList.remove("input-error");
-            if (originalProduct.quantity_stock != +stockInputElement.value) {
-              updateProduct.quantity_stock = +stockInputElement.value;
+            if (originalProduct.quantityInStock != +stockInputElement.value) {
+              updateProduct.quantityInStock = +stockInputElement.value;
               hasChanged = true;
               associatePriceInputElement.classList.remove("input-error");
-              let changeValue = +stockInputElement.value - originalProduct.quantity_stock
+              let changeValue = +stockInputElement.value - originalProduct.quantityInStock
               if (+associatePriceInputElement.value == 0 && changeValue < 0) {
                 associate_price_text.innerText = 'invendu (' + changeValue + ')';
               } else if (+associatePriceInputElement.value > 0 && changeValue < 0) {
@@ -322,7 +323,7 @@ export class DetailsProduitsComponent {
         let originalProduct = this.originalListeProduits.find(product => product.id === itemId);
 
         if (updatedTransa && originalProduct) {
-          let Trans = { "id_product": updatedTransa.id, "stock_change": (updatedTransa.quantity_stock - originalProduct?.quantity_stock), "price": updatedTransa.associate_price }
+          let Trans = { "id_product": updatedTransa.id, "stock_change": (updatedTransa.quantityInStock - originalProduct?.quantityInStock), "price": updatedTransa.associate_price }
           updateTransactions.push(Trans);
         }
       });
@@ -331,7 +332,7 @@ export class DetailsProduitsComponent {
       let originalProduct = this.originalListeProduits.find(product => product.id === optionalID);
 
       if (updatedTransa && originalProduct) {
-        let Trans = { "id_product": updatedTransa.id, "stock_change": (originalProduct?.quantity_stock - updatedTransa.quantity_stock), "price": updatedTransa.associate_price }
+        let Trans = { "id_product": updatedTransa.id, "stock_change": (originalProduct?.quantityInStock - updatedTransa.quantityInStock), "price": updatedTransa.associate_price }
         updateTransactions.push(Trans);
       }
     }

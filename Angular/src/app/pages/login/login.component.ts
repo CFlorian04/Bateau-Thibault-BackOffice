@@ -30,7 +30,8 @@ export class LoginComponent implements OnInit {
   setConnection() {
     console.log(this.signin.get('email')?.value);
     console.log(this.signin.get('password')?.value);
-    this.loginHelper.sendLogin(this.signin.get('email')?.value, this.signin.get('password')?.value);
+    // this.loginHelper.sendLogin(this.signin.get('email')?.value, this.signin.get('password')?.value);
+    this.loginHelper.sendLogin("root", "root");
     // console.log(AES.encrypt( password, "password").toString());
   }
 
