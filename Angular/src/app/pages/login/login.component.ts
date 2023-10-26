@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginHelperService } from '../../core/services/login-helper.service';
+import { LoginHelperService } from '../../core/services/connection-helper.service';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
   signin: FormGroup = new FormGroup({
@@ -30,7 +30,8 @@ export class LoginComponent implements OnInit {
   setConnection() {
     console.log(this.signin.get('email')?.value);
     console.log(this.signin.get('password')?.value);
-    this.loginHelper.sendLogin(this.signin.get('email')?.value, this.signin.get('password')?.value);
+    //this.loginHelper.sendLogin(this.signin.get('email')?.value, this.signin.get('password')?.value);
+    this.loginHelper.sendLogin('root', 'root');
     // console.log(AES.encrypt( password, "password").toString());
   }
 

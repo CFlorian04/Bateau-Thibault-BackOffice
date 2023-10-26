@@ -1,7 +1,6 @@
 <div *ngIf = "this.loginHelper.getConnection() == false; then showLogin; else showApp"></div>
 <ng-template #showLogin>
     <div>
-        <!-- <router-outlet name = ''></router-outlet> -->
         <app-login></app-login>
     </div>
 </ng-template>

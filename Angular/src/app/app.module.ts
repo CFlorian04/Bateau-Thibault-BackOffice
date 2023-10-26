@@ -14,11 +14,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './pages/login/login.component';
 import { MatToolbarModule } from '@angular/material/toolbar'
 import { CookieService } from 'ngx-cookie-service';
-import { LoginHelperService } from './core/services/login-helper.service';
+import { LoginHelperService } from './core/services/connection-helper.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { HistoryComponent } from './pages/history/history.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatDatepicker} from '@angular/material/datepicker';
+import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { MatSliderModule } from '@angular/material/slider'
 
 @NgModule({
   declarations: [
@@ -35,12 +39,16 @@ import { HistoryComponent } from './pages/history/history.component';
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatToolbarModule,
-    MatFormFieldModule,
     ReactiveFormsModule ,
+
+    MatToolbarModule,
+    // MatFormFieldModule,
     MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSliderModule,
   ],
-  providers: [HttpClient, ProductsService, CookieService, LoginHelperService],
+providers: [HttpClient, ProductsService, CookieService, LoginHelperService, {provide: MAT_DATE_LOCALE, useValue: 'fr-FR'}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

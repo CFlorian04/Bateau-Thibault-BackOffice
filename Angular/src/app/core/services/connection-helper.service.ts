@@ -27,10 +27,10 @@ export class LoginHelperService {
   }
 
   getCookies() {
-  this.accessToken=this.cookieService.get('accessToken');
-  this.refreshToken=this.cookieService.get('refreshToken');
-  console.log(this.accessToken);
-  console.log(this.refreshToken);
+    this.accessToken=this.cookieService.get('accessToken');
+    this.refreshToken=this.cookieService.get('refreshToken');
+    console.log(this.accessToken);
+    console.log(this.refreshToken);
   }
 
   setCookies(){
@@ -38,8 +38,8 @@ export class LoginHelperService {
     this.cookieService.set('refreshToken',this.refreshToken);
   }
    
-  deleteCookie(){
-    this.cookieService.delete('name');
+  deleteCookie(name : string){
+    this.cookieService.delete(name);
   }
    
   deleteAll(){
