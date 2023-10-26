@@ -14,7 +14,6 @@ h2 {
 
 /* Styles for the product list container */
 .productArray {
-  width: fit-content;
   margin: 20px;
   padding: 10px;
   border: 1px solid #ddd;

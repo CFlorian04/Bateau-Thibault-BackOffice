@@ -30,7 +30,7 @@
             <input class="discount" type="number" min="0" max="100" value="{{ produit.discount }}" (change)="saveProductChange(produit.id)">
           </td>
           <td>
-            <input class="stock" type="number" min="0" value="{{ produit.quantity_stock }}" (change)="saveProductChange(produit.id)">
+            <input class="stock" type="number" min="0" value="{{ produit.quantityInStock }}" (change)="saveProductChange(produit.id)">
           </td>
           <td class="associate-column">
             <input class="associate-price" type="number" min="0" value="0" (change)="saveProductChange(produit.id)">
