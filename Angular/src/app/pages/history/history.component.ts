@@ -72,6 +72,7 @@ export class HistoryComponent {
     },
   ];
   historyListTemp : HistoryModel[] = [];
+  historyListProfitTemp : HistoryModel[] = [];
   //dateList : Date[] = [];
   checkboxList : boolean[] = [true, true, true];
   sliderValues = [0, 100];
@@ -90,9 +91,9 @@ export class HistoryComponent {
     this.range.controls['end'].valueChanges.subscribe(value => {
       this.createChart();
     });
-    /*this.rangeProfit.controls['end'].valueChanges.subscribe(value => {
-      //this.createProfitChart();
-    });*/
+    this.rangeProfit.controls['end'].valueChanges.subscribe(value => {
+      this.createChartProfit();
+    });
     this.getHistoric();
   }
 
@@ -134,14 +135,11 @@ export class HistoryComponent {
 
 
     let chart = new Chart("myChart", {  type: 'line',
-    data: {// values on X-Axis
-      // labels: ['2022-05-10', '2022-05-11', '2022-05-12','2022-05-13',
-      //          '2022-05-14', '2022-05-15', '2022-05-16','2022-05-17', ], 
-      //labels: [ formatDate(this.range.controls['start'].value!, 'd/M/YY', 'fr-FR'), formatDate(this.range.controls['end'].value!, 'd/M/YY', 'fr-FR')],
+    data: {
       labels: this.dateList,
       datasets: [
         {
-          label: "Historique",
+          label: "Historique des ventes",
           data: this.valueList,
           backgroundColor: 'blue'
         },
@@ -160,14 +158,6 @@ export class HistoryComponent {
         y: {
           min: 0
         }
-      //   y: [{
-      //     display: true,
-      //     ticks: {
-      //         suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
-      //         // OR //
-      //         beginAtZero: true   // minimum value will be 0.
-      //     }
-      // }]
       },
       plugins: {
         legend: {
@@ -175,7 +165,7 @@ export class HistoryComponent {
         },
         title: {
           display: true,
-          text: 'Chart.js Line Chart'
+          text: 'Historique'
         },
         tooltip: {
           titleAlign: "center",
@@ -196,9 +186,9 @@ export class HistoryComponent {
             },
             label: (item) => {
               let product = this.productList.find((produ) => produ.id == this.historyListTemp[item.parsed.x].tigID);
-              return ["Quantité de la vente : " + this.historyListTemp[item.parsed.x].stock_change + " " + product?.unit,
-                    "Prix unitaire : " + this.historyListTemp[item.parsed.x].price + " €",
-                    "Prix total : " + (this.historyListTemp[item.parsed.x].price * this.historyListTemp[item.parsed.x].stock_change) + " €"];
+              return ["Prix total : " + (this.historyListTemp[item.parsed.x].price * this.historyListTemp[item.parsed.x].stock_change) + " €",
+                    "Quantité de la vente : " + this.historyListTemp[item.parsed.x].stock_change + " " + product?.unit,
+                    "Prix unitaire : " + this.historyListTemp[item.parsed.x].price + " €"];
             },
           }
         }
@@ -244,7 +234,7 @@ export class HistoryComponent {
     {
       //console.log("add element ", elem.date);
       this.dateList.push(elem.date);//formatDate(elem.date, 'd/M/YY', 'fr-FR'));
-      this.valueList.push(elem.stock_change);
+      this.valueList.push(elem.stock_change * elem.price);
     }
   }
 
@@ -270,5 +260,101 @@ export class HistoryComponent {
       num += his.stock_change * his.price;
     }
     return num;
+  }
+
+  generateProductProfitList() {
+    this.historyListProfitTemp = [];
+
+    let endDate = new Date();
+    endDate.setDate((this.rangeProfit.controls['end'].value!.getDate() + 1));
+    endDate.setHours(0, 0, 0, 0);
+
+    for (let his of this.historyList) {
+      let product = this.productList.find((produ) => produ.id == his.tigID);
+      if (his.date.valueOf() < this.rangeProfit.controls['start'].value!.valueOf() || his.date.valueOf() > endDate.valueOf())
+      {
+        continue;
+      }
+      this.historyListProfitTemp.push(his);
+    }
+    this.dateProfitList = [];
+    this.valueProfitList = [];
+    for (let elem of this.historyListProfitTemp)
+    {
+      //console.log("add element ", elem.date);
+      this.dateProfitList.push(elem.date);//formatDate(elem.date, 'd/M/YY', 'fr-FR'));
+      this.valueProfitList.push(elem.stock_change * elem.price);
+    }
+  }
+
+  createChartProfit(){
+    if (this.rangeProfit.controls['end'].value == null)
+      return;
+    var chartExist = Chart.getChart("myChartProfit"); // <canvas> id
+    if (chartExist != undefined)  
+      chartExist.destroy(); 
+
+    this.generateProductProfitList();
+
+    console.log("profit", this.dateProfitList, this.valueProfitList);
+
+    let chart = new Chart("myChartProfit", {  type: 'line',
+    data: {
+      labels: this.dateProfitList,
+      datasets: [
+        {
+          label: "Historique des transactions",
+          data: this.valueProfitList,
+          backgroundColor: 'blue'
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: {
+          ticks: {
+            callback: (val, index) => {
+              return formatDate(this.dateProfitList[index], 'd/M/YY', 'fr-FR');
+            },
+          }
+        },
+      },
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Chart.js Line Chart'
+        },
+        tooltip: {
+          titleAlign: "center",
+          callbacks: {
+            title: (item) => {
+              let product = this.productList.find((produ) => produ.id == this.historyListProfitTemp[item[0].parsed.x].tigID);
+              return product?.name;
+            },
+            afterTitle: (item) => {
+              let product = this.productList.find((produ) => produ.id == this.historyListProfitTemp[item[0].parsed.x].tigID);
+              return ProductCategory[product!.category][1].toString();
+            },
+            beforeLabel: (item) => {
+              let product = this.productList.find((produ) => produ.id == this.historyListProfitTemp[item.parsed.x].tigID);
+              return ["Date de vente : " + formatDate(this.historyListProfitTemp[item.parsed.x].date, 'MMM d, y, H:mm:ss', "fr-FR"),
+                    "Prix  de base : " + product?.price,
+                    "Montant de la promotion : " + Math.round((100 - (this.historyListProfitTemp[item.parsed.x].price * 100 / product!.price))) + " %"];
+            },
+            label: (item) => {
+              let product = this.productList.find((produ) => produ.id == this.historyListProfitTemp[item.parsed.x].tigID);
+              return ["Prix total : " + (this.historyListProfitTemp[item.parsed.x].price * this.historyListProfitTemp[item.parsed.x].stock_change) + " €",
+                    "Quantité de la vente : " + this.historyListProfitTemp[item.parsed.x].stock_change + " " + product?.unit,
+                    "Prix unitaire : " + this.historyListProfitTemp[item.parsed.x].price + " €",];
+            },
+          }
+        }
+      },
+    },
+    });
   }
 }

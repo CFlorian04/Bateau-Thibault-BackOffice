@@ -33,6 +33,9 @@
         <mat-datepicker-toggle matIconSuffix [for]="pickerProfit"></mat-datepicker-toggle>
         <mat-date-range-picker #pickerProfit></mat-date-range-picker>
     </mat-form-field>
+    <div>
+        <canvas id="myChartProfit"></canvas>
+    </div>
     <p>Montant total du chiffre d'affaire pour la période choisie = {{getTotalProfit()}} €</p>
     <p>Montant total à prévoir après impôt (30%) = {{getTotalProfit() - (30 * getTotalProfit() / 100)}} €</p>
 </div>
