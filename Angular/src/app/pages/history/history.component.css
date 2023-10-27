@@ -1,0 +1,59 @@
+/* Style du conteneur principal */
+div {
+    margin: 20px;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+}
+
+/* Style pour le formulaire de sélection de date */
+#formDatePicker {
+    margin-bottom: 20px;
+}
+
+/* Style pour les étiquettes des champs de date */
+mat-label {
+    font-weight: bold;
+}
+
+/* Style pour les champs de date de début et de fin */
+#DatePickerStart,
+#DatePickerEnd {
+    width: 150px;
+}
+
+/* Style pour les légendes des dates */
+mat-hint {
+    font-size: 12px;
+    color: #888;
+}
+
+/* Style pour le slider */
+mat-slider {
+    width: 30%;
+    margin-bottom: 20px;
+}
+
+/* Style pour les cases à cocher des catégories de produit */
+li {
+    list-style: none;
+}
+
+mat-checkbox {
+    display: block;
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+/* Style pour le graphique */
+#myChart {
+    width: 100%;
+    height: 300px;
+    margin: 20px 0;
+}
+
+/* Style pour le montant total des ventes */
+p {
+    font-weight: bold;
+    margin: 20px 0;
+}

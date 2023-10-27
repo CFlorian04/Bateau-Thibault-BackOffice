@@ -313,7 +313,7 @@ export class DetailsProduitsComponent {
         console.log(res);
       },
       (err) => {
-          alert('Failed loading JSON data');
+          alert('L\'envoi de la modification à échoué');
         }
       );
 
@@ -355,13 +355,13 @@ export class DetailsProduitsComponent {
       //this.connectionService.sendDataToServer(HttpListUrl.UpdateProduct, "data='" + json + "'") //TODO : appeler la bonne fonction du back avec les valeurs souhaités
       this.listeIDProduitUpdate = [];
 
-      // this.connectionService.sendDataToServer(HttpListUrl.UpdateProduct, json).subscribe( (res : any) => {
-      //   console.log(res);
-      // },
-      // (err) => {
-      //     alert('Failed loading JSON data');
-      //   }
-      // );
+      this.connectionService.sendDataToServer(HttpListUrl.AddHistory, json).subscribe( (res : any) => {
+        console.log(res);
+      },
+      (err) => {
+          alert('L\'envoie de la transaction a échoué');
+        }
+      );
 
       //console.log("Sauvegarde de toutes les modifications de produits");
       //console.log(json);
