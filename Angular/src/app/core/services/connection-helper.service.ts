@@ -97,12 +97,21 @@ export class ConnectionHelperService {
   }
 
   sendLogin(email : string, password : string) {
-    let crypted = this.encrypt(password).replace(/=$/,'');
+    /*let crypted = this.encrypt(password).replace(/=$/,'');
     let decrypted = this.decrypt(crypted);
     console.log("Crypted = " + crypted);
-    console.log("Decrypted = " + decrypted.toString());
-    if(email == 'root' && password == 'root')
-      this.setConnection(true);
+    console.log("Decrypted = " + decrypted.toString());*/
+    /*if(email == 'root' && password == 'root')
+      this.setConnection(true);*/
+    let data = {username : email, password : password};
+    this.sendDataToServer(HttpListUrl.ApiToken, JSON.stringify(data)).subscribe( (res : any) => {
+        //let tokens = {accessToken : '', refreshToken : ''};
+        JSON.parse(res);
+      },
+      (err) => {
+          alert('Failed loading JSON data');
+        }
+    );
   }
 
   getDataFromServer<Type>(url: string) {
@@ -114,7 +123,7 @@ export class ConnectionHelperService {
     return this.http.get<Type>(this.serverURL + url);
   }
 
-  sendDataToServer(url : string, data: string = '') {
-    this.http.post(this.serverURL + url, data);
+  sendDataToServer<Type>(url : string, data: string = '') {
+    return this.http.post(this.serverURL + url, data);
   }
 }

@@ -21,10 +21,44 @@ export class HistoryComponent {
   readonly ProductCategory = ProductCategory;
   readonly TodayDate = new Date();
   
+  dateList : string[] = [];
+  valueList : number[] = [];
+
   productList!: Product[];
-  historyList : HistoryModel[] = [];
+  historyList : HistoryModel[] = [
+    {
+      tigID : 1,
+      stock_change : 21,
+      price : 10,
+      date : new Date('2023-10-21')
+    },
+    {
+      tigID : 2,
+      stock_change : 22,
+      price : 10,
+      date : new Date('2023-10-22')
+    },
+    {
+      tigID : 3,
+      stock_change : 23,
+      price : 10,
+      date : new Date('2023-10-23')
+    },
+    {
+      tigID : 4,
+      stock_change : 24,
+      price : 10,
+      date : new Date('2023-10-24')
+    },
+    {
+      tigID : 5,
+      stock_change : 25,
+      price : 10,
+      date : new Date('2023-10-25')
+    },
+  ];
   historyListTemp : HistoryModel[] = [];
-  dateList : number[] = [];
+  //dateList : Date[] = [];
   checkboxList : boolean[] = [true, true, true];
   sliderValues = [0, 0];
 
@@ -49,10 +83,8 @@ export class HistoryComponent {
     this.connectionService.getDataFromServer<HistoryModel[]>(HttpListUrl.ShowHistory).subscribe((res: HistoryModel[]) => {
       // this.productsService.getProductsFromJson().subscribe((res: Product[]) => {
         console.log(res);
-        this.historyList = res;
+        //this.historyList = res; //TODO uncomment
         this.historyList.sort((a : HistoryModel, b : HistoryModel) => a.date.valueOf() - b.date.valueOf());
-        for (let elem of this.historyList)
-          this.dateList.push(elem.date.valueOf());
       },
       (err) => {
           alert('Failed loading JSON data');
@@ -75,22 +107,43 @@ export class HistoryComponent {
       chartExist.destroy(); 
 
     this.generateProductList();
+    console.log(new Date('2023-10-25'));
+    console.log("historyTemp list :" + this.historyListTemp);
+
 
     let chart = new Chart("myChart", {  type: 'line',
     data: {// values on X-Axis
       // labels: ['2022-05-10', '2022-05-11', '2022-05-12','2022-05-13',
       //          '2022-05-14', '2022-05-15', '2022-05-16','2022-05-17', ], 
-      labels: [ formatDate(this.range.controls['start'].value!, 'd/M/YY', 'en-US'), formatDate(this.range.controls['end'].value!, 'd/M/YY', 'en-US')],
-       datasets: [
+      //labels: [ formatDate(this.range.controls['start'].value!, 'd/M/YY', 'en-US'), formatDate(this.range.controls['end'].value!, 'd/M/YY', 'en-US')],
+      labels: this.dateList,
+      datasets: [
         {
           label: "Historique",
-          data: this.dateList,
+          data: this.valueList,
           backgroundColor: 'blue'
         },
       ],
     },
     options: {
       responsive: true,
+      // scales: {
+      //   x: {
+      //     ticks: {
+      //       callback: function(val, index) {
+      //         // Hide every 2nd tick label
+      //         return val;
+      //         // return index % 2 === 0 ? this.getLabelForValue(val) : '';
+      //       },
+      //       // callback: (value, index, ticks) => {
+              
+      //       //   return ticks[index].;
+      //       //   //console.log(value);
+      //       //   //return formatDate(value, 'd/M/YY', 'en-US');
+      //       // }
+      //     }
+      //   }
+      // },
       plugins: {
         legend: {
           position: 'top',
@@ -114,6 +167,7 @@ export class HistoryComponent {
 
   updateCheckBox(category : any) {
     this.checkboxList[category] = !this.checkboxList[category];
+    this.createChart();
   }
 
   generateProductList() {
@@ -123,12 +177,31 @@ export class HistoryComponent {
     for (let his of this.historyList) {
       let product = this.productList.find((produ) => produ.id == his.tigID);
       if (his.date.valueOf() < this.range.controls['start'].value!.valueOf() || his.date.valueOf() > this.range.controls['end'].value!.valueOf())
+      {
+        console.log("Pas dans les dates");
+        console.log(his.date , this.range.controls['end'].value!);
         continue;
+      }
       if (product!.discount < this.sliderValues[0] || product!.discount > this.sliderValues[1])
+      {
+        console.log("Pas dans les promo");
         continue;
+      }
       if (this.checkboxList[product!.category] == false)
+      {
+        console.log("Pas dans les categorie");
         continue;
+      }
+      console.log("Ajout " + his);
       this.historyListTemp.push(his);
+    }
+    this.dateList = [];
+    this.valueList = [];
+    for (let elem of this.historyListTemp)
+    {
+      //console.log("add element ", elem.date);
+      this.dateList.push(formatDate(elem.date, 'd/M/YY', 'en-US'));
+      this.valueList.push(elem.stock_change);
     }
   }
 }

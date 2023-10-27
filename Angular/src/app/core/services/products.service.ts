@@ -3,11 +3,11 @@ import { Product } from '../interfaces/product';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const ProductCategory = [
-  [0,'Poissons'],
-  [1,'Fruit de Mer'],
-  [2,'Crustacés'],
-];
+// const ProductCategory = [
+//   [0,'Poissons'],
+//   [1,'Fruit de Mer'],
+//   [2,'Crustacés'],
+// ];
 
 // enum HttpListUrl {
 //   InfoProducts = "infoproducts/",
