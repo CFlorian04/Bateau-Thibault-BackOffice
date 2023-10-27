@@ -31,7 +31,7 @@ export enum HttpListUrl {
   DecrementStock = "decrementStock/",//<int:id>/<int:number>/
   UpdateProduct = "modifyProduct/",//[data='product_model']
 
-  AddHistory = "AddHistory/",
+  AddHistory = "addHistory/",
 
   ApiToken = "api/token/",// [name='token_obtain_pair']
   ApiTokenRefresh = "api/token/refresh/"// [name='token_refresh']

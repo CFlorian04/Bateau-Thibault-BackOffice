@@ -180,24 +180,24 @@ def decrement_stock(request, id, number):
         return Response({"detail": "Not enough stock to decrement."}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
-def ajouterHistorique(request, data):
-    logging.getLogger("mylogger").info(data)
-    data = json.loads(data)
+@api_view(['POST'])
+def ajouterHistorique(request):
+    # logging.getLogger("mylogger").info(data)
     try:
-        change = data['stock_change']
-        if change == 0:
-            raise ValueError("La quantité de stock changée ne peut pas être égale à 0.")
+        for data in request.data:
+            change = data['stock_change']
+            if change == 0:
+                raise ValueError("La quantité de stock changée ne peut pas être égale à 0.")
 
-        new_historique = HistoriqueSerializer(data={
-            'tigID': data['id'],
-            'stock_change': change,
-            'price': data['price'],
-            # 'created': datetime.datetime.now().strftime()
-        })
+            new_historique = HistoriqueSerializer(data={
+                'tigID': data['id'],
+                'stock_change': change,
+                'price': data['price'],
+                # 'created': datetime.datetime.now().strftime()
+            })
 
-        if new_historique.is_valid():
-            new_historique.save()
+            if new_historique.is_valid():
+                new_historique.save()
 
     except KeyError as k:
         logging.getLogger("mylogger").info(f"Une des attendues n'a pas été fournie avec le JSON: {k}")
