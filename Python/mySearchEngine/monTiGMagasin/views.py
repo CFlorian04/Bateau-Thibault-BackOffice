@@ -237,7 +237,7 @@ def afficherHistoriqueObjet(request, pid):
 
 
 @api_view(['GET'])
-def modifierObjet(request, data):
+def modifierObjet(request):
     data = json.loads(data)
     try:
         product = InfoProduct.objects.get(tig_id=data['id'])

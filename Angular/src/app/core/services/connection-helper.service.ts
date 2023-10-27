@@ -31,6 +31,8 @@ export enum HttpListUrl {
   DecrementStock = "decrementStock/",//<int:id>/<int:number>/
   UpdateProduct = "modifyProduct/",//[data='product_model']
 
+  AddHistory = "AddHistory/",
+
   ApiToken = "api/token/",// [name='token_obtain_pair']
   ApiTokenRefresh = "api/token/refresh/"// [name='token_refresh']
 }
@@ -54,7 +56,7 @@ export class ConnectionHelperService {
   private setConnection(connect : boolean) {
     this.connected = connect;
     if (this.connected == true) {
-      this.router.navigate(['/home']);
+      //this.router.navigate(['/home']);
     }
   }
 
@@ -115,7 +117,6 @@ export class ConnectionHelperService {
         this.setCookies();
 
         if( res["access"] && res["refresh"]) {
-          console.log(this.refreshToken + ' / ' + this.accessToken);
           this.setConnection(true);
         }
         else {
