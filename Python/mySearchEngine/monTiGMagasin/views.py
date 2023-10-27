@@ -254,10 +254,15 @@ def afficherHistoriqueObjet(request, pid):
     return JsonResponse(res, safe=False)
 
 
+# Todo: terminer le traitement via POST DATA
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def modifierObjet(request, data):
-    data = json.loads(data)
+# @permission_classes([IsAuthenticated])
+def modifierObjet(request):
+    # data = json.loads(data)
+
+    logging.getLogger("mylogger").info(request.GET.get("body") )
+    logging.getLogger("mylogger").info(request.data)
+    breakpoint()
     try:
         product = InfoProduct.objects.get(tig_id=data['id'])
         product.quantityInStock = data['quantityInStock']
