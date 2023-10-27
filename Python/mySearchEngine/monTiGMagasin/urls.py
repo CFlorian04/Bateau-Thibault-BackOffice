@@ -5,8 +5,8 @@ urlpatterns = [
     path('', views.InfoProductList.as_view() ),
     path('infoproducts/', views.InfoProductList.as_view()),
     path('infoproduct/<int:tig_id>/', views.InfoProductDetail.as_view()),
-    path('products/', views.RedirectionListeDeProduits.as_view()),
-    path('product/<int:pk>/', views.RedirectionDetailProduit.as_view()),
+    # path('products/', views.RedirectionListeDeProduits.as_view()),
+    # path('product/<int:pk>/', views.RedirectionDetailProduit.as_view()),
     path('onsaleproducts/', views.PromoList.as_view()),
     path('onsaleproduct/<int:pk>/', views.PromoDetail.as_view()),
     path('shipPoints/', views.ShipPointsList.as_view()),
@@ -21,10 +21,10 @@ urlpatterns = [
     path('shell/<int:pk>/', views.CoquillageDetail.as_view()),
     path('putonsale/<int:id>/<str:newprice>/', views.put_on_sale), # Nouvelle URL pour mettre en promotion
     path('removesale/<int:id>/', views.remove_sale),  # Nouvelle URL pour retirer de la promotion
-    path('incrementStock/<int:id>/<int:number>/', views.increment_stock),
-    path('decrementStock/<int:id>/<int:number>/', views.decrement_stock),
+    path('incrementStock/<int:pid>/<int:number>/', views.increment_stock),
+    path('decrementStock/<int:pid>/<int:number>/', views.decrement_stock),
     path('showHistory/', views.afficherHistorique),
     path('showObjectHistory/<int:pid>', views.afficherHistoriqueObjet),
     path('addHistory/<str:data>', views.ajouterHistorique),
-    path('modifyProduct/<str:data>', views.modifierObjet),
+    path('modifyProduct/', views.modifierObjet),
 ]
