@@ -341,14 +341,14 @@ export class HistoryComponent {
             },
             beforeLabel: (item) => {
               let product = this.productList.find((produ) => produ.id == this.historyListProfitTemp[item.parsed.x].tigID);
-              return ["Date de vente : " + formatDate(this.historyListProfitTemp[item.parsed.x].date, 'MMM d, y, H:mm:ss', "fr-FR"),
+              return ["Date d" + (this.historyListProfitTemp[item.parsed.x].stock_change <= 0 ? "'achat" : "e vente") + " : " + formatDate(this.historyListProfitTemp[item.parsed.x].date, 'MMM d, y, H:mm:ss', "fr-FR"),
                     "Prix  de base : " + product?.price,
                     "Montant de la promotion : " + Math.round((100 - (this.historyListProfitTemp[item.parsed.x].price * 100 / product!.price))) + " %"];
             },
             label: (item) => {
               let product = this.productList.find((produ) => produ.id == this.historyListProfitTemp[item.parsed.x].tigID);
               return ["Prix total : " + (this.historyListProfitTemp[item.parsed.x].price * this.historyListProfitTemp[item.parsed.x].stock_change) + " €",
-                    "Quantité de la vente : " + this.historyListProfitTemp[item.parsed.x].stock_change + " " + product?.unit,
+              "Quantité de l" + (this.historyListProfitTemp[item.parsed.x].stock_change <= 0 ? "'achat" : "a vente") + " : " + Math.abs(this.historyListProfitTemp[item.parsed.x].stock_change) + " " + product?.unit,
                     "Prix unitaire : " + this.historyListProfitTemp[item.parsed.x].price + " €",];
             },
           }

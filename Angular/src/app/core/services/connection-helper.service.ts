@@ -129,7 +129,7 @@ export class ConnectionHelperService {
           alert('Failed loading JSON data');
         }
     );
-    this.setConnection(true);
+    //this.setConnection(true);
   }
 
   getDataFromServer<Type>(url: string) {
