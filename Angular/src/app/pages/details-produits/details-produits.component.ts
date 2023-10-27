@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { cloneDeep } from 'lodash';
-import { Product } from 'src/app/core/interfaces/product';
-import { ProductsService } from 'src/app/core/services/products.service';
-
+import { Product, ProductCategory } from 'src/app/core/interfaces/product';
+import { ConnectionHelperService, HttpListUrl } from 'src/app/core/services/connection-helper.service';
 
 @Component({
   selector: 'app-details-produits',
@@ -25,14 +24,14 @@ export class DetailsProduitsComponent {
   isSaveAllDisabled: boolean = false;
 
 
-  constructor(public productsService: ProductsService) { }
+  constructor(private connectionService : ConnectionHelperService) { }
 
   /**
   * Récupère la liste des produits du service 'Products'.
   * @param param1 - Description du premier paramètre.
   * @param param2 - Description du deuxième paramètre.
   * @returns Description de la valeur de retour.
-  * @autre_actions 
+  * @autre_actions
   * - Stockage des valeurs original (sans modification) => 'originalListeProduits'
   * - Mise des données par défault => setDataAsDefault()
   * - Tri des produits en fonction de leur catégorie => sortArrayOfProducts()
@@ -55,12 +54,14 @@ export class DetailsProduitsComponent {
 
     this.listeProduits = [];
 
-    // this.productsService.getJSONDataFromServer("ListProducts").subscribe((res: Product[]) => {
-    this.productsService.getProductsFromJson().subscribe((res: Product[]) => {
+    this.connectionService.getDataFromServer<Product[]>(HttpListUrl.InfoProducts).subscribe((res: Product[]) => {
+    // this.productsService.getProductsFromJson().subscribe((res: Product[]) => {
+      console.log(res);
       this.listeProduits = res;
       this.originalListeProduits = cloneDeep(res); // Liste de valeurs original sans modifications
       this.setDataAsDefault(); // Mise des données par défault
       this.sortArrayOfProducts(); // Tri des produits par catégorie
+      this.isSaveAllDisabled = false;
     },
       (err) => {
         alert('Failed loading JSON data');
@@ -128,7 +129,7 @@ export class DetailsProduitsComponent {
   * Met à jour les produits dans la liste listeProduits[ ]
   * @param id - id du produit à mettre à jour
   * @returns Pas de retour
-  * @autre_actions 
+  * @autre_actions
   * - Stockage l'id si produit différent de l'original => listeIDProduitUpdate[ ]
   * - Ajoute du CSS si la valeur de l'input est incorrect
   * - Met à jour la valeur du prix avec réduction
@@ -184,11 +185,11 @@ export class DetailsProduitsComponent {
         if (stockInputElement) {
           if (+stockInputElement.value >= 0) { // Règle d'affichage d'erreur
             stockInputElement.classList.remove("input-error");
-            if (originalProduct.quantity_stock != +stockInputElement.value) {
-              updateProduct.quantity_stock = +stockInputElement.value;
+            if (originalProduct.quantityInStock != +stockInputElement.value) {
+              updateProduct.quantityInStock = +stockInputElement.value;
               hasChanged = true;
               associatePriceInputElement.classList.remove("input-error");
-              let changeValue = +stockInputElement.value - originalProduct.quantity_stock
+              let changeValue = +stockInputElement.value - originalProduct.quantityInStock
               if (+associatePriceInputElement.value == 0 && changeValue < 0) {
                 associate_price_text.innerText = 'invendu (' + changeValue + ')';
               } else if (+associatePriceInputElement.value > 0 && changeValue < 0) {
@@ -249,7 +250,8 @@ export class DetailsProduitsComponent {
   * @returns type: string
   */
   getProductCategoryName(category: number) {
-    return this.productsService.getProductCategoryName(category);
+    const categoryItem = ProductCategory.find(e => e[0] === category);
+    return categoryItem ? categoryItem[1] : null;
   }
 
   /**
@@ -281,20 +283,22 @@ export class DetailsProduitsComponent {
   */
   SaveItems(optionalID?: number) {
 
-    let updatedProducts: Product[] = [];
+    // let updatedProducts: Product[] = [];
+
+    let updatedProducts: { id: number, quantityInStock: number, discount: number }[] = [];
 
     if (typeof optionalID !== undefined) {
       this.listeIDProduitUpdate.forEach(itemId => {
         let updatedProduct = this.listeProduits.find(product => product.id === itemId);
         if (updatedProduct) {
-          updatedProducts.push(updatedProduct);
+          updatedProducts.push({ id: updatedProduct.tig_id, quantityInStock: updatedProduct.quantityInStock, discount: updatedProduct.discount });
         }
       });
       this.sendTransactions();
     } else {
       let updatedProduct = this.listeProduits.find(product => product.id === optionalID);
       if (updatedProduct) {
-        updatedProducts.push(updatedProduct);
+        updatedProducts.push({ id: updatedProduct.tig_id, quantityInStock: updatedProduct.quantityInStock, discount: updatedProduct.discount });
       }
       this.sendTransactions(optionalID);
     }
@@ -302,11 +306,20 @@ export class DetailsProduitsComponent {
 
     if (updatedProducts.length > 0) {
       let json = JSON.stringify(updatedProducts);
-      this.productsService.saveProductsChanges(json);
+      //this.connectionService.sendDataToServer(HttpListUrl.UpdateProduct, "data='" + json + "'") //TODO : appeler la bonne fonction du back avec les valeurs souhaités
       this.listeIDProduitUpdate = [];
 
+      this.connectionService.sendDataToServer(HttpListUrl.UpdateProduct, json).subscribe( (res : any) => {
+        console.log(res);
+      },
+      (err) => {
+          alert('L\'envoi de la modification à échoué');
+        }
+      );
+
+
       //console.log("Sauvegarde de toutes les modifications de produits");
-      console.log(json);
+      //console.log(json);
 
     }
   }
@@ -314,7 +327,9 @@ export class DetailsProduitsComponent {
 
   sendTransactions(optionalID?: number) {
 
-    let updateTransactions: { id_product: number, stock_change: number, price: number }[] = [];
+    // let updateTransactions: { id_product: number, stock_change: number, price: number }[] = [];
+    let updateTransactions: { id: number, stock_change: number, price: number }[] = [];
+
 
     if (typeof optionalID !== undefined) {
       this.listeIDProduitUpdate.forEach(itemId => {
@@ -322,8 +337,7 @@ export class DetailsProduitsComponent {
         let originalProduct = this.originalListeProduits.find(product => product.id === itemId);
 
         if (updatedTransa && originalProduct) {
-          let Trans = { "id_product": updatedTransa.id, "stock_change": (updatedTransa.quantity_stock - originalProduct?.quantity_stock), "price": updatedTransa.associate_price }
-          updateTransactions.push(Trans);
+          updateTransactions.push({ id: updatedTransa.id, stock_change: updatedTransa.quantityInStock-originalProduct.quantityInStock, price: updatedTransa.price });;
         }
       });
     } else {
@@ -331,19 +345,26 @@ export class DetailsProduitsComponent {
       let originalProduct = this.originalListeProduits.find(product => product.id === optionalID);
 
       if (updatedTransa && originalProduct) {
-        let Trans = { "id_product": updatedTransa.id, "stock_change": (originalProduct?.quantity_stock - updatedTransa.quantity_stock), "price": updatedTransa.associate_price }
-        updateTransactions.push(Trans);
+        updateTransactions.push({ id: updatedTransa.id, stock_change: updatedTransa.quantityInStock-originalProduct.quantityInStock, price: updatedTransa.price });;
       }
     }
 
 
     if (updateTransactions.length > 0) {
       let json = JSON.stringify(updateTransactions);
-      this.productsService.saveProductsChanges(json);
+      //this.connectionService.sendDataToServer(HttpListUrl.UpdateProduct, "data='" + json + "'") //TODO : appeler la bonne fonction du back avec les valeurs souhaités
       this.listeIDProduitUpdate = [];
 
+      this.connectionService.sendDataToServer(HttpListUrl.AddHistory, json).subscribe( (res : any) => {
+        console.log(res);
+      },
+      (err) => {
+          alert('L\'envoie de la transaction a échoué');
+        }
+      );
+
       //console.log("Sauvegarde de toutes les modifications de produits");
-      console.log(json);
+      //console.log(json);
     }
 
   }

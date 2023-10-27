@@ -3,4 +3,7 @@ Python/.idea/django-ex1.iml
 Python/.idea/misc.xml
 Python/.idea/vcs.xml
 Python/mySearchEngine/__pycache__
+Python/myTidyVEnv/Lib/site-packages/*/__pycache__
+Python/mySearchEngine/monTiGMagasin/__pycache__
+Python/mySearchEngine/monTiGMagasin/migrations/__pycache__
 *.pyc

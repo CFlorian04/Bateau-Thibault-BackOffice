@@ -1,0 +1,15 @@
+/* Style de la div contenant le titre */
+.title-div {
+    background-color: #3498db; /* Couleur de fond */
+    padding: 20px; /* Marge intérieure pour l'espacement */
+    text-align: center; /* Alignement du texte au centre */
+}
+
+/* Style du texte du titre */
+.title-text {
+    font-size: 36px; /* Taille de la police */
+    color: #fff; /* Couleur du texte */
+    text-transform: uppercase; /* Mettre en majuscules */
+    font-weight: bold; /* Gras */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Ombre du texte */
+}

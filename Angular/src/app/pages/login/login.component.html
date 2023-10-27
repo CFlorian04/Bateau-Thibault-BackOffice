@@ -1,9 +1,10 @@
+<app-title></app-title>
 <body>
     <form [formGroup]="signin">
         <mat-form-field class="example-full-width">
             <mat-label>Adresse Email</mat-label>
-        <input matInput placeholder="exemple@domain.fr"  formControlName="email">
-    </mat-form-field>
+            <input matInput placeholder="exemple@domain.fr"  formControlName="email" autocomplete="email" type="email" style="height: 35px;">
+        </mat-form-field>
     <span *ngIf="signin.hasError('email', 'email') && signin.get('email')!.touched">
         Veuillez entrer une adresse Email valide.
     </span>

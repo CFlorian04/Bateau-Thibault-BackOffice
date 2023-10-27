@@ -4,6 +4,7 @@ export interface Product {
     category: number;
     availability: boolean;
     id: number;
+    tig_id: number;
     price: number;
     price_on_sale: number;
     discount: number;
@@ -11,10 +12,17 @@ export interface Product {
     owner: string;
     unit: string;
     name: string;
-    quantity_stock: number;
+    quantityInStock: number;
     quantity_sold: number;
 
     discounted_price: number; // Prix avec réduction
     associate_price: number; // Prix associer à un changement de stock
 
 }
+
+
+export const ProductCategory = [
+    [0,'Poissons'],
+    [1,'Fruit de Mer'],
+    [2,'Crustacés'],
+  ];

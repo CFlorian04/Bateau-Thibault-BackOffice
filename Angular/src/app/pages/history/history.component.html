@@ -1,1 +1,41 @@
-<p>history works!</p>
+<div>
+    <mat-form-field id = "formDatePicker">
+        <mat-label>Entrer un intervalle</mat-label>
+        <mat-date-range-input [formGroup]="range" [rangePicker]="picker" [max]="this.TodayDate">
+            <input matStartDate formControlName="start" placeholder="Date de début" id = "DatePickerStart">
+            <input matEndDate formControlName="end" placeholder="Date de fin" id = "DatePickerEnd">
+        </mat-date-range-input>
+        <mat-hint>JJ/MM/AAAA - JJ/MM/AAAA</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+    <p></p>
+    <mat-slider min="0" max="100" step="1" showTickMarks discrete [displayWith]="formatLabel">
+        <input title="start" value="0" matSliderStartThumb (change)="sliderChange($event)">
+        <input title="end" value="100" matSliderEndThumb (change)="sliderChange($event)">
+    </mat-slider>
+    <li *ngFor="let category of ProductCategoryList">
+        <mat-checkbox (change)="updateCheckBox(category)" [checked]="this.checkboxList[category]">
+          {{ProductCategory[category][1]}}
+        </mat-checkbox>
+    </li>
+    <div>
+        <canvas id="myChart"></canvas>
+    </div>
+    <p>Montant total des ventes afficher = {{getTotalSales()}} €</p>
+    <mat-form-field id = "formDatePickerProfit">
+        <mat-label>Entrer un intervalle</mat-label>
+        <mat-date-range-input [formGroup]="rangeProfit" [rangePicker]="pickerProfit" [max]="this.TodayDate">
+            <input matStartDate formControlName="start" placeholder="Date de début" id = "DatePickerStartProfit">
+            <input matEndDate formControlName="end" placeholder="Date de fin" id = "DatePickerEndProfit">
+        </mat-date-range-input>
+        <mat-hint>JJ/MM/AAAA - JJ/MM/AAAA</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="pickerProfit"></mat-datepicker-toggle>
+        <mat-date-range-picker #pickerProfit></mat-date-range-picker>
+    </mat-form-field>
+    <div>
+        <canvas id="myChartProfit"></canvas>
+    </div>
+    <p>Montant total du chiffre d'affaire pour la période choisie = {{getTotalProfit()}} €</p>
+    <p>Montant total à prévoir après impôt (30%) = {{getTotalProfit() - (30 * getTotalProfit() / 100)}} €</p>
+</div>

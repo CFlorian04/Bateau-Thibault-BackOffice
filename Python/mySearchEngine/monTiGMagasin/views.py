@@ -1,15 +1,20 @@
+import json
+import logging
+import datetime
 import requests
+
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import Http404, JsonResponse
 from monTiGMagasin.config import baseUrl
-from monTiGMagasin.models import InfoProduct, ProduitEnPromotion, ProduitDisponible, Poisson, Crustacean, Coquillage
+from monTiGMagasin.models import InfoProduct, ProduitEnPromotion, ProduitDisponible, Poisson, Crustacean, Coquillage, Historique
 from monTiGMagasin.serializers import (InfoProductSerializer, ProduitEnPromotionSerializer, AvailableProductSerializer,
                                PoissonsSerializer, CrustaceansSerializer,
-                               CoquillagesSerializer)
+                               CoquillagesSerializer, HistoriqueSerializer)
 
 from rest_framework import status
+
 
 # Create your views here.
 class InfoProductList(APIView):
@@ -53,7 +58,6 @@ class RedirectionDetailProduit(APIView):
 #        NO DEFITION of delete --> server will return "405 NOT ALLOWED"
 
 
-
 class PromoList(APIView):
     def get(self, request, format=None):
         res = []
@@ -65,7 +69,6 @@ class PromoList(APIView):
         return JsonResponse(res, safe=False)
 #    def post(self, request, format=None):
 #        NO DEFINITION of post --> server will return "405 NOT ALLOWED"
-
 
 
 class PromoDetail(APIView):
@@ -175,6 +178,90 @@ def decrement_stock(request, id, number):
 
     else:
         return Response({"detail": "Not enough stock to decrement."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def ajouterHistorique(request):
+    # logging.getLogger("mylogger").info(data)
+    try:
+        for data in request.data:
+            change = data['stock_change']
+            if change == 0:
+                raise ValueError("La quantité de stock changée ne peut pas être égale à 0.")
+
+            new_historique = HistoriqueSerializer(data={
+                'tigID': data['id'],
+                'stock_change': change,
+                'price': data['price'],
+                # 'created': datetime.datetime.now().strftime()
+            })
+
+            if new_historique.is_valid():
+                new_historique.save()
+
+    except KeyError as k:
+        logging.getLogger("mylogger").info(f"Une des attendues n'a pas été fournie avec le JSON: {k}")
+        return Response({"Impossible d'enregistrer la modification, car au moins une donnée est manquante"})
+
+    except Exception as e:
+        logging.getLogger("mylogger").info(f"Une erreur est survenue: {e}")
+        return Response({"Impossible d'enregistrer la modification car une erreur est survenue"})
+
+    return Response({"Données ajoutées à l'historique!"})
+
+
+@api_view(['GET'])
+def afficherHistorique(request):
+    logger = logging.getLogger("mylogger")
+    res = []
+
+    for prod in Historique.objects.all():
+        serializer = HistoriqueSerializer(prod)
+        res.append(serializer.data)
+
+    if not res:
+        logger.info("Return reponse null ")
+        
+    return JsonResponse(res, safe=False)
+
+
+@api_view(['GET'])
+def afficherHistoriqueObjet(request, pid):
+    res = []
+    for prod in Historique.objects.all():
+        if prod.tigID == pid:
+            serializer = HistoriqueSerializer(prod)
+            res.append(serializer.data)
+
+    return JsonResponse(res, safe=False)
+
+
+@api_view(['POST'])
+def modifierObjet(request):
+    # logging.getLogger("mylogger").info(request.data)
+    try:
+        for data in request.data:
+            # logging.getLogger("mylogger").info(data)
+            product = InfoProduct.objects.get(tig_id=data['id'])
+            product.quantityInStock = data['quantityInStock']
+            product.discount = data['discount']
+            product.save()
+            # logging.getLogger("mylogger").info(f"{product.name}, {product.id}")
+
+        # logging.getLogger("mylogger").info("")
+
+        # for product in InfoProduct.objects.all():
+        #     logging.getLogger("mylogger").info(f"{product.name}, {product.id}")
+
+    except KeyError as k:
+        logging.getLogger("mylogger").info(f"Une des attendues n'a pas été fournie avec le JSON: {k}")
+        return Response({"Impossible d'enregistrer la modification, car au moins une donnée est manquante"})
+
+    except Exception as e:
+        logging.getLogger("mylogger").info(f"Une erreur est survenue: {e}")
+        return Response({"Impossible d'enregistrer la modification car une erreur est survenue"})
+
+    return Response({"Objet modifié avec succès"})
 
 
 class ShipPointsList(APIView):
@@ -323,6 +410,9 @@ class CoquillageDetail(APIView):
     #        NO DEFINITION of post --> server will return "405 NOT ALLOWED"
 
 
+
+
+# Doc: Tests uniquement, sert à créer un utilisateur manuellement
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 
