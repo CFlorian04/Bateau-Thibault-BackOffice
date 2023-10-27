@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginHelperService } from '../../core/services/connection-helper.service';
+import { ConnectionHelperService } from '../../core/services/connection-helper.service';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 @Component({
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
     secondaryEmail: '',
  }); 
 
-  constructor(public loginHelper : LoginHelperService, private formBuilder : FormBuilder) {}
+  constructor(public loginHelper : ConnectionHelperService, private formBuilder : FormBuilder) {}
 
   ngOnInit() {
     this.loginHelper.getCookies();

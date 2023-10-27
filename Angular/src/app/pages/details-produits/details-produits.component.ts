@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { cloneDeep } from 'lodash';
-import { Product } from 'src/app/core/interfaces/product';
-import { ProductsService } from 'src/app/core/services/products.service';
-
+import { Product, ProductCategory } from 'src/app/core/interfaces/product';
+import { ConnectionHelperService, HttpListUrl } from 'src/app/core/services/connection-helper.service';
 
 @Component({
   selector: 'app-details-produits',
@@ -25,7 +24,7 @@ export class DetailsProduitsComponent {
   isSaveAllDisabled: boolean = false;
 
 
-  constructor(public productsService: ProductsService) { }
+  constructor(private connectionService : ConnectionHelperService) { }
 
   /**
   * Récupère la liste des produits du service 'Products'.
@@ -55,7 +54,7 @@ export class DetailsProduitsComponent {
 
     this.listeProduits = [];
 
-    this.productsService.getJSONDataFromServer("InfoProducts").subscribe((res: Product[]) => {
+    this.connectionService.getDataFromServer<Product[]>(HttpListUrl.InfoProducts).subscribe((res: Product[]) => {
     // this.productsService.getProductsFromJson().subscribe((res: Product[]) => {
       console.log(res);
       this.listeProduits = res;
@@ -244,14 +243,15 @@ export class DetailsProduitsComponent {
     });
     //console.log(this.isSaveAllDisabled);
   }
-
+  
   /**
   * Récupère le nom de la catégorie
   * @param category - Numéro  de la catégorie
   * @returns type: string
   */
   getProductCategoryName(category: number) {
-    return this.productsService.getProductCategoryName(category);
+    const categoryItem = ProductCategory.find(e => e[0] === category);
+    return categoryItem ? categoryItem[1] : null;
   }
 
   /**
@@ -306,11 +306,11 @@ export class DetailsProduitsComponent {
 
     if (updatedProducts.length > 0) {
       let json = JSON.stringify(updatedProducts);
-      this.productsService.saveProductsChanges(json);
+      //this.connectionService.sendDataToServer(HttpListUrl.UpdateProduct, "data='" + json + "'") //TODO : appeler la bonne fonction du back avec les valeurs souhaités
       this.listeIDProduitUpdate = [];
 
       //console.log("Sauvegarde de toutes les modifications de produits");
-      console.log(json);
+      //console.log(json);
 
     }
   }
@@ -343,7 +343,7 @@ export class DetailsProduitsComponent {
 
     if (updateTransactions.length > 0) {
       let json = JSON.stringify(updateTransactions);
-      this.productsService.saveProductsChanges(json);
+      //this.connectionService.sendDataToServer(HttpListUrl.UpdateProduct, "data='" + json + "'") //TODO : appeler la bonne fonction du back avec les valeurs souhaités
       this.listeIDProduitUpdate = [];
 
       //console.log("Sauvegarde de toutes les modifications de produits");

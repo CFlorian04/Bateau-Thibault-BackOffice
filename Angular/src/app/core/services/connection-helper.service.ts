@@ -1,19 +1,54 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import * as CryptoJS from 'crypto-js';
+import { HttpClient } from '@angular/common/http';
+
+
+export enum HttpListUrl {
+  Admin = "admin/",
+  InfoProducts = "infoproducts/",
+  Products = "products/",
+  OnSaleProducts = "onsaleproducts/",
+  ShipPoints = "shipPoints/",
+  AvailableProducts = "availableProducts/",
+  Fishes = "fishes/",
+  Crustaceans = "crustaceans/",
+  Shells = "shells/",
+  ShowHistory = "showHistory/",
+  
+  InfoProduct = "infoproduct/",//<int:tig_id>/
+  Product = "product/",//<int:pk>/
+  OnSaleProduct = "onsaleproduct/",//<int:pk>/
+  ShipPoint = "shipPoint/",//<int:pk>/
+  AvailableProduct = "availableProduct/",//<int:pk>/
+  Fish = "fish/",//<int:pk>/
+  Crustacean = "crustacean/",//<int:pk>/
+  Shell = "shell/",//<int:pk>/
+  Putonsale = "putonsale/",//<int:id>/<str:newprice>/
+  Removesale = "removesale/",//<int:id>/
+  IncrementStock = "incrementStock/",//<int:id>/<int:number>/
+  DecrementStock = "decrementStock/",//<int:id>/<int:number>/
+  UpdateProduct = "updateProduct/",//[data='product_model']
+
+  ApiToken = "api/token/",// [name='token_obtain_pair']
+  ApiTokenRefresh = "api/token/refresh/"// [name='token_refresh']
+}
 
 @Injectable({
   providedIn: 'root'
 })
-export class LoginHelperService {
+export class ConnectionHelperService {
   private accessToken : string = '';
   private refreshToken : string = '';
 
   private key = 'sd6g1b8d9f4n6t51ns65b4qe98r6h1db56';
 
   private connected : boolean = false;
+  serverURL: string = "http://127.0.0.1:8000/";
 
-  constructor(private cookieService : CookieService) {}
+  constructor(private http: HttpClient, private cookieService : CookieService) {
+    this.getConfigDataFromJson();
+  }
 
   private setConnection(connect : boolean) {
     this.connected = connect;
@@ -22,6 +57,12 @@ export class LoginHelperService {
     }
   }
 
+  getConfigDataFromJson() {
+    this.http.get<any>('../../../assets/data/config.json').subscribe(data => {
+      this.serverURL = data.serverURL;
+    });
+  }
+  
   getConnection() {
     return this.connected;
   }
@@ -64,8 +105,16 @@ export class LoginHelperService {
       this.setConnection(true);
   }
 
-  // ngOnInit(): void {
-  // this.cookie_name=this.cookieService.get('name');
-  // this.all_cookies=this.cookieService.getAll();  // get all cookies object
-  //     }
+  getDataFromServer<Type>(url: string) {
+    if (this.serverURL === '') {
+      this.getConfigDataFromJson();
+      console.log("Pas d'URL serveur récupéré")
+    }
+    console.log("URL REQUESTED: " + this.serverURL + url);
+    return this.http.get<Type>(this.serverURL + url);
+  }
+
+  sendDataToServer(url : string, data: string = '') {
+    this.http.post(this.serverURL + url, data);
+  }
 }

@@ -18,3 +18,10 @@ export interface Product {
     associate_price: number; // Prix associer à un changement de stock
 
 }
+
+
+export const ProductCategory = [
+    [0,'Poissons'],
+    [1,'Fruit de Mer'],
+    [2,'Crustacés'],
+  ];
