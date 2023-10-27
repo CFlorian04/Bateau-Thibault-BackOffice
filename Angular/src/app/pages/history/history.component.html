@@ -23,4 +23,16 @@
         <canvas id="myChart"></canvas>
     </div>
     <p>Montant total des ventes afficher = {{getTotalSales()}} €</p>
+    <mat-form-field id = "formDatePickerProfit">
+        <mat-label>Entrer un intervalle</mat-label>
+        <mat-date-range-input [formGroup]="rangeProfit" [rangePicker]="pickerProfit" [max]="this.TodayDate">
+            <input matStartDate formControlName="start" placeholder="Date de début" id = "DatePickerStartProfit">
+            <input matEndDate formControlName="end" placeholder="Date de fin" id = "DatePickerEndProfit">
+        </mat-date-range-input>
+        <mat-hint>JJ/MM/AAAA - JJ/MM/AAAA</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="pickerProfit"></mat-datepicker-toggle>
+        <mat-date-range-picker #pickerProfit></mat-date-range-picker>
+    </mat-form-field>
+    <p>Montant total du chiffre d'affaire pour la période choisie = {{getTotalProfit()}} €</p>
+    <p>Montant total à prévoir après impôt (30%) = {{getTotalProfit() - (30 * getTotalProfit() / 100)}} €</p>
 </div>

@@ -18,12 +18,19 @@ export class HistoryComponent {
     end: new FormControl<Date | null>(null),
   });
 
+  rangeProfit = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+
   readonly ProductCategoryList = [0, 1, 2];
   readonly ProductCategory = ProductCategory;
   readonly TodayDate = new Date();
   
   dateList : Date[] = [];
   valueList : number[] = [];
+  dateProfitList : Date[] = [];
+  valueProfitList : number[] = [];
 
   productList!: Product[];
   historyList : HistoryModel[] = [
@@ -31,6 +38,12 @@ export class HistoryComponent {
       tigID : 1,
       stock_change : 21,
       price : 1,
+      date : new Date('2023-10-21')
+    },
+    {
+      tigID : 1,
+      stock_change : 21,
+      price : -5,
       date : new Date('2023-10-21')
     },
     {
@@ -77,6 +90,9 @@ export class HistoryComponent {
     this.range.controls['end'].valueChanges.subscribe(value => {
       this.createChart();
     });
+    /*this.rangeProfit.controls['end'].valueChanges.subscribe(value => {
+      //this.createProfitChart();
+    });*/
     this.getHistoric();
   }
 
@@ -206,9 +222,15 @@ export class HistoryComponent {
   generateProductList() {
     this.historyListTemp = [];
 
+    let endDate = new Date();
+    endDate.setDate((this.range.controls['end'].value!.getDate() + 1));
+    endDate.setHours(0, 0, 0, 0);
+
     for (let his of this.historyList) {
+      if (his.price <= 0)
+        continue;
       let product = this.productList.find((produ) => produ.id == his.tigID);
-      if (his.date.valueOf() < this.range.controls['start'].value!.valueOf() || his.date.valueOf() > this.range.controls['end'].value!.valueOf())
+      if (his.date.valueOf() < this.range.controls['start'].value!.valueOf() || his.date.valueOf() > endDate.valueOf())
       {
         continue;
       }
@@ -236,6 +258,22 @@ export class HistoryComponent {
     let num = 0
     for (let elem of this.historyListTemp) {
       num += elem.stock_change * elem.price;
+    }
+    return num;
+  }
+
+  getTotalProfit() {
+
+    if (this.rangeProfit.controls['end'].value == null)
+      return 0;
+    let num = 0
+    let endDate = new Date();
+    endDate.setDate((this.rangeProfit.controls['end'].value!.getDate() + 1));
+    endDate.setHours(0, 0, 0, 0);
+    for (let his of this.historyList) {
+      if (his.date.valueOf() < this.rangeProfit.controls['start'].value!.valueOf() || his.date.valueOf() > endDate.valueOf())
+        continue
+      num += his.stock_change * his.price;
     }
     return num;
   }
