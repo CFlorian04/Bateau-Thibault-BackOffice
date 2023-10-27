@@ -220,7 +220,7 @@ def afficherHistorique(request):
         res.append(serializer.data)
 
     if not res:
-        logger.info("RIEN FDP")
+        logger.info("Return reponse null ")
         
     return JsonResponse(res, safe=False)
 
