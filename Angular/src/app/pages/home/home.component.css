@@ -1,0 +1,19 @@
+/* Style du titre de la page */
+h3 {
+    font-size: 24px; /* Taille de la police */
+    color: #333; /* Couleur du texte */
+    text-align: center; /* Alignement du texte au centre */
+    margin-top: 20px; /* Marge supérieure pour l'espacement */
+}
+
+/* Style du lien vers le site */
+p a {
+    text-decoration: none; /* Supprimer la soulignement du lien */
+    color: #3498db; /* Couleur du lien */
+    font-weight: bold; /* Gras */
+}
+
+/* Style du lien au survol */
+p a:hover {
+    text-decoration: underline; /* Souligner le lien au survol */
+}

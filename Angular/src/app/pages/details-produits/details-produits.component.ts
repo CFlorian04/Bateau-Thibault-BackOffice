@@ -309,6 +309,15 @@ export class DetailsProduitsComponent {
       //this.connectionService.sendDataToServer(HttpListUrl.UpdateProduct, "data='" + json + "'") //TODO : appeler la bonne fonction du back avec les valeurs souhaités
       this.listeIDProduitUpdate = [];
 
+      this.connectionService.sendDataToServer(HttpListUrl.UpdateProduct + "data='" + json + "'").subscribe( (res : any) => {
+        console.log(res);
+      },
+      (err) => {
+          alert('Failed loading JSON data');
+        }
+      );
+
+
       //console.log("Sauvegarde de toutes les modifications de produits");
       //console.log(json);
 
@@ -346,8 +355,16 @@ export class DetailsProduitsComponent {
       //this.connectionService.sendDataToServer(HttpListUrl.UpdateProduct, "data='" + json + "'") //TODO : appeler la bonne fonction du back avec les valeurs souhaités
       this.listeIDProduitUpdate = [];
 
+      // this.connectionService.sendDataToServer(HttpListUrl.UpdateProduct, json).subscribe( (res : any) => {
+      //   console.log(res);
+      // },
+      // (err) => {
+      //     alert('Failed loading JSON data');
+      //   }
+      // );
+
       //console.log("Sauvegarde de toutes les modifications de produits");
-      console.log(json);
+      //console.log(json);
     }
 
   }

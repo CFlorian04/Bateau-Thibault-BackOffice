@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import * as CryptoJS from 'crypto-js';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 
 export enum HttpListUrl {
@@ -28,7 +29,7 @@ export enum HttpListUrl {
   Removesale = "removesale/",//<int:id>/
   IncrementStock = "incrementStock/",//<int:id>/<int:number>/
   DecrementStock = "decrementStock/",//<int:id>/<int:number>/
-  UpdateProduct = "updateProduct/",//[data='product_model']
+  UpdateProduct = "modifyProduct/",//[data='product_model']
 
   ApiToken = "api/token/",// [name='token_obtain_pair']
   ApiTokenRefresh = "api/token/refresh/"// [name='token_refresh']
@@ -46,14 +47,14 @@ export class ConnectionHelperService {
   private connected : boolean = false;
   serverURL: string = "http://127.0.0.1:8000/";
 
-  constructor(private http: HttpClient, private cookieService : CookieService) {
+  constructor(private http: HttpClient, private cookieService : CookieService, private router: Router) {
     this.getConfigDataFromJson();
   }
 
   private setConnection(connect : boolean) {
     this.connected = connect;
     if (this.connected == true) {
-      
+      this.router.navigate(['/home']);
     }
   }
 
@@ -106,7 +107,22 @@ export class ConnectionHelperService {
     let data = {username : email, password : password};
     this.sendDataToServer(HttpListUrl.ApiToken, JSON.stringify(data)).subscribe( (res : any) => {
         //let tokens = {accessToken : '', refreshToken : ''};
-        JSON.parse(res);
+        //JSON.parse(res);
+        console.log(res);
+
+        this.accessToken = res["access"];
+        this.refreshToken = res["refresh"];
+        this.setCookies();
+
+        if( res["access"] && res["refresh"]) {
+          console.log(this.refreshToken + ' / ' + this.accessToken);
+          this.setConnection(true);
+        }
+        else {
+          this.setConnection(false);
+        }
+
+
       },
       (err) => {
           alert('Failed loading JSON data');
@@ -124,6 +140,9 @@ export class ConnectionHelperService {
   }
 
   sendDataToServer<Type>(url : string, data: string = '') {
-    return this.http.post(this.serverURL + url, data);
+    console.log(this.serverURL + url)
+    console.log(data);
+    console.log({headers: {"Content-Type": "application/json", "Authorization": "JWT "+ this.refreshToken} });
+    return this.http.post(this.serverURL + url, data, {headers: {"Content-Type": "application/json", "Authorization": "JWT "+ this.refreshToken} } );
   }
 }

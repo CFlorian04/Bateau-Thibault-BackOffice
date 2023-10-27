@@ -9,7 +9,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { HeaderComponent } from './features/header/header.component';
 import { FooterComponent } from './features/footer/footer.component';
 import { DetailsProduitsComponent } from './pages/details-produits/details-produits.component';
-import { ProductsService } from './core/services/products.service';
+// import { ProductsService } from './core/services/products.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './pages/login/login.component';
 import { MatToolbarModule } from '@angular/material/toolbar'
@@ -24,6 +24,7 @@ import {MatDatepicker} from '@angular/material/datepicker';
 import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MatSliderModule } from '@angular/material/slider'
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { TitleComponent } from './features/title/title.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     DetailsProduitsComponent,
     LoginComponent,
     HistoryComponent,
+    TitleComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,7 +52,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatSliderModule,
     MatCheckboxModule
   ],
-providers: [HttpClient, ProductsService, CookieService, ConnectionHelperService, {provide: MAT_DATE_LOCALE, useValue: 'fr-FR'}, {provide: LOCALE_ID, useValue: 'fr' }],
+providers: [HttpClient, CookieService, ConnectionHelperService, {provide: MAT_DATE_LOCALE, useValue: 'fr-FR'}, {provide: LOCALE_ID, useValue: 'fr' }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
