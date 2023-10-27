@@ -236,14 +236,22 @@ def afficherHistoriqueObjet(request, pid):
     return JsonResponse(res, safe=False)
 
 
-@api_view(['GET'])
-def modifierObjet(request, data):
-    data = json.loads(data)
+@api_view(['POST'])
+def modifierObjet(request):
+    # logging.getLogger("mylogger").info(request.data)
     try:
-        product = InfoProduct.objects.get(tig_id=data['id'])
-        product.quantityInStock = data['quantityInStock']
-        product.price = data['price']
-        product.save()
+        for data in request.data:
+            # logging.getLogger("mylogger").info(data)
+            product = InfoProduct.objects.get(tig_id=data['id'])
+            product.quantityInStock = data['quantityInStock']
+            product.discount = data['discount']
+            product.save()
+            # logging.getLogger("mylogger").info(f"{product.name}, {product.id}")
+
+        # logging.getLogger("mylogger").info("")
+
+        # for product in InfoProduct.objects.all():
+        #     logging.getLogger("mylogger").info(f"{product.name}, {product.id}")
 
     except KeyError as k:
         logging.getLogger("mylogger").info(f"Une des attendues n'a pas été fournie avec le JSON: {k}")
