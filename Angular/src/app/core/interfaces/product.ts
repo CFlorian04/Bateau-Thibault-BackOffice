@@ -4,6 +4,7 @@ export interface Product {
     category: number;
     availability: boolean;
     id: number;
+    tig_id: number;
     price: number;
     price_on_sale: number;
     discount: number;

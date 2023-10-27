@@ -25,6 +25,6 @@ urlpatterns = [
     path('decrementStock/<int:id>/<int:number>/', views.decrement_stock),
     path('showHistory/', views.afficherHistorique),
     path('showObjectHistory/<int:pid>', views.afficherHistoriqueObjet),
-    path('addHistory/<str:data>', views.ajouterHistorique),
+    path('addHistory/', views.ajouterHistorique),
     path('modifyProduct/', views.modifierObjet),
 ]

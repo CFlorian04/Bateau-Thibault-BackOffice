@@ -31,7 +31,7 @@ export class DetailsProduitsComponent {
   * @param param1 - Description du premier paramètre.
   * @param param2 - Description du deuxième paramètre.
   * @returns Description de la valeur de retour.
-  * @autre_actions 
+  * @autre_actions
   * - Stockage des valeurs original (sans modification) => 'originalListeProduits'
   * - Mise des données par défault => setDataAsDefault()
   * - Tri des produits en fonction de leur catégorie => sortArrayOfProducts()
@@ -129,7 +129,7 @@ export class DetailsProduitsComponent {
   * Met à jour les produits dans la liste listeProduits[ ]
   * @param id - id du produit à mettre à jour
   * @returns Pas de retour
-  * @autre_actions 
+  * @autre_actions
   * - Stockage l'id si produit différent de l'original => listeIDProduitUpdate[ ]
   * - Ajoute du CSS si la valeur de l'input est incorrect
   * - Met à jour la valeur du prix avec réduction
@@ -243,7 +243,7 @@ export class DetailsProduitsComponent {
     });
     //console.log(this.isSaveAllDisabled);
   }
-  
+
   /**
   * Récupère le nom de la catégorie
   * @param category - Numéro  de la catégorie
@@ -285,20 +285,20 @@ export class DetailsProduitsComponent {
 
     // let updatedProducts: Product[] = [];
 
-    let updatedProducts: { id: number, quantityInStock: number, price: number }[] = [];
+    let updatedProducts: { id: number, quantityInStock: number, discount: number }[] = [];
 
     if (typeof optionalID !== undefined) {
       this.listeIDProduitUpdate.forEach(itemId => {
         let updatedProduct = this.listeProduits.find(product => product.id === itemId);
         if (updatedProduct) {
-          updatedProducts.push({ id: updatedProduct.id, quantityInStock: updatedProduct.quantityInStock, price: updatedProduct.price });
+          updatedProducts.push({ id: updatedProduct.tig_id, quantityInStock: updatedProduct.quantityInStock, discount: updatedProduct.discount });
         }
       });
       this.sendTransactions();
     } else {
       let updatedProduct = this.listeProduits.find(product => product.id === optionalID);
       if (updatedProduct) {
-        updatedProducts.push({ id: updatedProduct.id, quantityInStock: updatedProduct.quantityInStock, price: updatedProduct.price });
+        updatedProducts.push({ id: updatedProduct.tig_id, quantityInStock: updatedProduct.quantityInStock, discount: updatedProduct.discount });
       }
       this.sendTransactions(optionalID);
     }
