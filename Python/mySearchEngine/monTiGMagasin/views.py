@@ -3,7 +3,8 @@ import logging
 import datetime
 import requests
 
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import Http404, JsonResponse
@@ -105,6 +106,7 @@ def put_on_sale(request, id, newprice):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def remove_sale(request, id):
     try:
         product = InfoProduct.objects.get(tig_id=id)
@@ -120,9 +122,10 @@ def remove_sale(request, id):
 
 
 @api_view(['GET'])
-def increment_stock(request, id, number):
+@permission_classes([IsAuthenticated])
+def increment_stock(request, pid, number):
     try:
-        product = InfoProduct.objects.get(tig_id=id)
+        product = InfoProduct.objects.get(tig_id=pid)
     except InfoProduct.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -145,9 +148,13 @@ def increment_stock(request, id, number):
 
 
 @api_view(['GET'])
-def decrement_stock(request, id, number):
+@permission_classes([IsAuthenticated])
+def decrement_stock(request, pid, number):
+    # if not request.user.is_authenticated:
+    #    return Response({"detail": "Vous devez être connecté pour accéder à cette page."}, status=status.HTTP_400_BAD_REQUEST)
+
     try:
-        product = InfoProduct.objects.get(tig_id=id)
+        product = InfoProduct.objects.get(tig_id=pid)
     except InfoProduct.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 

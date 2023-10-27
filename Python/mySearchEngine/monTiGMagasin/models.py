@@ -71,7 +71,7 @@ class Historique(models.Model):
     stock_change = models.IntegerField(default='-1')
     price = models.IntegerField(default='-1')
 
-    date = models.DateTimeField(default=datetime.now())
+    date = models.DateTimeField(default=datetime.now() )
 
     class Meta:
         ordering = ('created',)
