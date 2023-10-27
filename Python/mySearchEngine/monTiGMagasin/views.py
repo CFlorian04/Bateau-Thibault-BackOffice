@@ -18,17 +18,22 @@ from rest_framework import status
 
 
 # Create your views here.
+@permission_classes([IsAuthenticated])
 class InfoProductList(APIView):
     def get(self, request, format=None):
         products = InfoProduct.objects.all()
         serializer = InfoProductSerializer(products, many=True)
         return Response(serializer.data)
+
+
+@permission_classes([IsAuthenticated])
 class InfoProductDetail(APIView):
     def get_object(self, tig_id):
         try:
             return InfoProduct.objects.get(tig_id=tig_id)
         except InfoProduct.DoesNotExist:
             raise Http404
+
     def get(self, request, tig_id, format=None):
         product = self.get_object(tig_id=tig_id)
         serializer = InfoProductSerializer(product)
@@ -36,6 +41,7 @@ class InfoProductDetail(APIView):
 
 
 # Doc: FROM OLD FILES
+@permission_classes([IsAuthenticated])
 class RedirectionListeDeProduits(APIView):
     def get(self, request, format=None):
         response = requests.get(baseUrl+'products/')
@@ -45,12 +51,14 @@ class RedirectionListeDeProduits(APIView):
 #        NO DEFITION of post --> server will return "405 NOT ALLOWED"
 
 
+@permission_classes([IsAuthenticated])
 class RedirectionDetailProduit(APIView):
     def get(self, request, pk, format=None):
         try:
             response = requests.get(baseUrl+'product/'+str(pk)+'/')
             jsondata = response.json()
             return Response(jsondata)
+
         except:
             raise Http404
 #    def put(self, request, pk, format=None):
@@ -59,6 +67,7 @@ class RedirectionDetailProduit(APIView):
 #        NO DEFITION of delete --> server will return "405 NOT ALLOWED"
 
 
+@permission_classes([IsAuthenticated])
 class PromoList(APIView):
     def get(self, request, format=None):
         res = []
@@ -72,6 +81,7 @@ class PromoList(APIView):
 #        NO DEFINITION of post --> server will return "405 NOT ALLOWED"
 
 
+@permission_classes([IsAuthenticated])
 class PromoDetail(APIView):
     def get_object(self, pk):
         try:
@@ -88,6 +98,7 @@ class PromoDetail(APIView):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def put_on_sale(request, id, newprice):
     try:
         product = InfoProduct.objects.get(tig_id=id)
@@ -107,9 +118,9 @@ def put_on_sale(request, id, newprice):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def remove_sale(request, id):
+def remove_sale(request, pid):
     try:
-        product = InfoProduct.objects.get(tig_id=id)
+        product = InfoProduct.objects.get(tig_id=pid)
     except InfoProduct.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -150,9 +161,6 @@ def increment_stock(request, pid, number):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def decrement_stock(request, pid, number):
-    # if not request.user.is_authenticated:
-    #    return Response({"detail": "Vous devez être connecté pour accéder à cette page."}, status=status.HTTP_400_BAD_REQUEST)
-
     try:
         product = InfoProduct.objects.get(tig_id=pid)
     except InfoProduct.DoesNotExist:
@@ -188,6 +196,7 @@ def decrement_stock(request, pid, number):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def ajouterHistorique(request, data):
     logging.getLogger("mylogger").info(data)
     data = json.loads(data)
@@ -218,6 +227,7 @@ def ajouterHistorique(request, data):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def afficherHistorique(request):
     logger = logging.getLogger("mylogger")
     res = []
@@ -233,6 +243,7 @@ def afficherHistorique(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def afficherHistoriqueObjet(request, pid):
     res = []
     for prod in Historique.objects.all():
@@ -244,6 +255,7 @@ def afficherHistoriqueObjet(request, pid):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def modifierObjet(request, data):
     data = json.loads(data)
     try:
@@ -263,6 +275,7 @@ def modifierObjet(request, data):
     return Response({"Objet modifié avec succès"})
 
 
+@permission_classes([IsAuthenticated])
 class ShipPointsList(APIView):
     def get(self, request, format=None):
         response = requests.get(baseUrl + 'shipPoints/')
@@ -270,6 +283,7 @@ class ShipPointsList(APIView):
         return Response(jsondata)
 
 
+@permission_classes([IsAuthenticated])
 class RedirectionShipPointDetail(APIView):
     def get(self, request, pk, format=None):
         try:
@@ -280,6 +294,7 @@ class RedirectionShipPointDetail(APIView):
             raise Http404
 
 
+@permission_classes([IsAuthenticated])
 class AvailableProducts(APIView):
     def get(self, request, format=None):
         res = []
@@ -304,6 +319,7 @@ class AvailableProducts(APIView):
     #     return Response(available)
 
 
+@permission_classes([IsAuthenticated])
 class AvailableProductDetail(APIView):
     def get_object(self, pk):
         try:
@@ -322,6 +338,7 @@ class AvailableProductDetail(APIView):
     #        NO DEFINITION of post --> server will return "405 NOT ALLOWED"
 
 
+@permission_classes([IsAuthenticated])
 class PoissonsListe(APIView):
     def get(self, request, format=None):
         res = []
@@ -333,6 +350,7 @@ class PoissonsListe(APIView):
         return JsonResponse(res, safe=False)
 
 
+@permission_classes([IsAuthenticated])
 class PoissonDetail(APIView):
     def get_object(self, pk):
         try:
@@ -351,6 +369,7 @@ class PoissonDetail(APIView):
     #        NO DEFINITION of post --> server will return "405 NOT ALLOWED"
 
 
+@permission_classes([IsAuthenticated])
 class CrustaceanListe(APIView):
     def get(self, request, format=None):
         res = []
@@ -362,6 +381,7 @@ class CrustaceanListe(APIView):
         return JsonResponse(res, safe=False)
 
 
+@permission_classes([IsAuthenticated])
 class CrustaceanDetail(APIView):
     def get_object(self, pk):
         try:
@@ -380,6 +400,7 @@ class CrustaceanDetail(APIView):
     #        NO DEFINITION of post --> server will return "405 NOT ALLOWED"
 
 
+@permission_classes([IsAuthenticated])
 class CoquillageListe(APIView):
     def get(self, request, format=None):
         res = []
@@ -391,6 +412,7 @@ class CoquillageListe(APIView):
         return JsonResponse(res, safe=False)
 
 
+@permission_classes([IsAuthenticated])
 class CoquillageDetail(APIView):
     def get_object(self, pk):
         try:
