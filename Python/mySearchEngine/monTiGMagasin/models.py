@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -66,7 +68,10 @@ class Historique(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     tigID = models.IntegerField(default='-1')
 
-    diff_stock = models.IntegerField(default='-1')
+    stock_change = models.IntegerField(default='-1')
+    price = models.IntegerField(default='-1')
+
+    date = models.DateTimeField(default=datetime.now())
 
     class Meta:
         ordering = ('created',)

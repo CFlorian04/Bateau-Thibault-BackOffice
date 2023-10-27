@@ -2,6 +2,7 @@ from django.urls import path, re_path
 from monTiGMagasin import views
 
 urlpatterns = [
+    path('', views.InfoProductList.as_view() ),
     path('infoproducts/', views.InfoProductList.as_view()),
     path('infoproduct/<int:tig_id>/', views.InfoProductDetail.as_view()),
     path('products/', views.RedirectionListeDeProduits.as_view()),
@@ -22,4 +23,8 @@ urlpatterns = [
     path('removesale/<int:id>/', views.remove_sale),  # Nouvelle URL pour retirer de la promotion
     path('incrementStock/<int:id>/<int:number>/', views.increment_stock),
     path('decrementStock/<int:id>/<int:number>/', views.decrement_stock),
+    path('showHistory/', views.afficherHistorique),
+    path('showObjectHistory/<int:pid>', views.afficherHistoriqueObjet),
+    path('addHistory/<str:data>', views.ajouterHistorique),
+    path('modifyProduct/<str:data>', views.modifierObjet),
 ]
