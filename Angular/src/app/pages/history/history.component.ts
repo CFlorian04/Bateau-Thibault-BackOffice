@@ -100,8 +100,11 @@ export class HistoryComponent {
     this.connectionService.getDataFromServer<HistoryModel[]>(HttpListUrl.ShowHistory).subscribe((res: HistoryModel[]) => {
       // this.productsService.getProductsFromJson().subscribe((res: Product[]) => {
         console.log(res);
-        //this.historyList = res; //TODO uncomment
+        this.historyList = res; //TODO uncomment
         this.historyList.sort((a : HistoryModel, b : HistoryModel) => a.date.valueOf() - b.date.valueOf());
+        for (let produ of this.historyList) {
+          produ.stock_change = -produ.stock_change;
+        }
       },
       (err) => {
           alert('Failed loading JSON data');
@@ -185,26 +188,17 @@ export class HistoryComponent {
               let product = this.productList.find((produ) => produ.id == this.historyListTemp[item[0].parsed.x].tigID);
               return ProductCategory[product!.category][1].toString();
             },
-            beforeBody: (item) => {
-              let product = this.productList.find((produ) => produ.id == this.historyListTemp[item[0].parsed.x].tigID);
-              return "Prix  de base : " + product?.price;
-              // return "Date de vente : " + formatDate(this.historyListTemp[item[0].parsed.x].date, 'MMM d, y, H:mm:ss', "fr-FR");
-            },
             beforeLabel: (item) => {
               let product = this.productList.find((produ) => produ.id == this.historyListTemp[item.parsed.x].tigID);
-              return "Montant de la promotion : " + Math.round((100 - (this.historyListTemp[item.parsed.x].price * 100 / product!.price))) + " %";
+              return ["Date de vente : " + formatDate(this.historyListTemp[item.parsed.x].date, 'MMM d, y, H:mm:ss', "fr-FR"),
+                    "Prix  de base : " + product?.price,
+                    "Montant de la promotion : " + Math.round((100 - (this.historyListTemp[item.parsed.x].price * 100 / product!.price))) + " %"];
             },
             label: (item) => {
               let product = this.productList.find((produ) => produ.id == this.historyListTemp[item.parsed.x].tigID);
-              return "Quantité de la vente : " + this.historyListTemp[item.parsed.x].stock_change + " " + product?.unit;
-            },
-            afterLabel: (item) => {
-              //let product = this.productList.find((produ) => produ.id == this.historyListTemp[item.parsed.x].tigID);
-              return "Prix unitaire : " + this.historyListTemp[item.parsed.x].price + " €";
-            },
-            afterBody: (item) => {
-              //let product = this.productList.find((produ) => produ.id == this.historyListTemp[item.parsed.x].tigID);
-              return "Prix total : " + (this.historyListTemp[item[0].parsed.x].price * this.historyListTemp[item[0].parsed.x].stock_change) + " €";
+              return ["Quantité de la vente : " + this.historyListTemp[item.parsed.x].stock_change + " " + product?.unit,
+                    "Prix unitaire : " + this.historyListTemp[item.parsed.x].price + " €",
+                    "Prix total : " + (this.historyListTemp[item.parsed.x].price * this.historyListTemp[item.parsed.x].stock_change) + " €"];
             },
           }
         }
@@ -227,7 +221,7 @@ export class HistoryComponent {
     endDate.setHours(0, 0, 0, 0);
 
     for (let his of this.historyList) {
-      if (his.price <= 0)
+      if (his.stock_change <= 0)
         continue;
       let product = this.productList.find((produ) => produ.id == his.tigID);
       if (his.date.valueOf() < this.range.controls['start'].value!.valueOf() || his.date.valueOf() > endDate.valueOf())
