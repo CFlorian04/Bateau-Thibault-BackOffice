@@ -16,7 +16,7 @@ export enum HttpListUrl {
   Crustaceans = "crustaceans/",
   Shells = "shells/",
   ShowHistory = "showHistory/",
-  
+
   InfoProduct = "infoproduct/",//<int:tig_id>/
   Product = "product/",//<int:pk>/
   OnSaleProduct = "onsaleproduct/",//<int:pk>/
@@ -63,7 +63,7 @@ export class ConnectionHelperService {
       this.serverURL = data.serverURL;
     });
   }
-  
+
   getConnection() {
     return this.connected;
   }
@@ -79,19 +79,19 @@ export class ConnectionHelperService {
     this.cookieService.set('accessToken', this.accessToken);
     this.cookieService.set('refreshToken',this.refreshToken);
   }
-   
+
   deleteCookie(name : string){
     this.cookieService.delete(name);
   }
-   
+
   deleteAll(){
     this.cookieService.deleteAll();
   }
-  
+
   encrypt(str : string) {
     return CryptoJS.AES.encrypt(str, this.key).toString();
   }
-  
+
   decrypt(encrypted : string) {
     const decrypted = CryptoJS.AES.decrypt(encrypted, this.key);
     return decrypted.toString(CryptoJS.enc.Utf8);
@@ -140,9 +140,11 @@ export class ConnectionHelperService {
   }
 
   sendDataToServer<Type>(url : string, data: string = '') {
-    console.log(this.serverURL + url)
-    console.log(data);
-    console.log({headers: {"Content-Type": "application/json", "Authorization": "JWT "+ this.refreshToken} });
+    console.log("URL UTILISE: " + this.serverURL + url)
+    console.log("DATA: " + data)
+
+    // console.log(data);
+    // console.log({headers: {"Content-Type": "application/json", "Authorization": "JWT "+ this.refreshToken} });
     return this.http.post(this.serverURL + url, data, {headers: {"Content-Type": "application/json", "Authorization": "JWT "+ this.refreshToken} } );
   }
 }
