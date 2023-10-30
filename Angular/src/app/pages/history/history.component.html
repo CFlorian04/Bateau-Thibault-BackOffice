@@ -1,4 +1,5 @@
 <div>
+    <!-- Date Picker permettant la selection d'une intervalle pour la Chart des ventes -->
     <mat-form-field id = "formDatePicker">
         <mat-label>Entrer un intervalle</mat-label>
         <mat-date-range-input [formGroup]="range" [rangePicker]="picker" [max]="this.TodayDate">
@@ -10,19 +11,24 @@
         <mat-date-range-picker #picker></mat-date-range-picker>
     </mat-form-field>
     <p></p>
+    <!-- Slider permettant le filtre sur le pourcentage de promotion -->
     <mat-slider min="0" max="100" step="1" showTickMarks discrete [displayWith]="formatLabel">
         <input title="start" value="0" matSliderStartThumb (change)="sliderChange($event)">
         <input title="end" value="100" matSliderEndThumb (change)="sliderChange($event)">
     </mat-slider>
+    <!-- Affichage des checkbox pour la selection des catégories -->
     <li *ngFor="let category of ProductCategoryList">
         <mat-checkbox (change)="updateCheckBox(category)" [checked]="this.checkboxList[category]">
           {{ProductCategory[category][1]}}
         </mat-checkbox>
     </li>
+    <!-- Affichage de la Chart des ventes -->
     <div>
         <canvas id="myChart"></canvas>
     </div>
+    <!-- Affichage du total des ventes en fonction des filtres choisie -->
     <p>Montant total des ventes afficher = {{getTotalSales()}} €</p>
+    <!-- Date Picker permettant la selection d'une intervalle pour la Chart des profits -->
     <mat-form-field id = "formDatePickerProfit">
         <mat-label>Entrer un intervalle</mat-label>
         <mat-date-range-input [formGroup]="rangeProfit" [rangePicker]="pickerProfit" [max]="this.TodayDate">
@@ -33,9 +39,12 @@
         <mat-datepicker-toggle matIconSuffix [for]="pickerProfit"></mat-datepicker-toggle>
         <mat-date-range-picker #pickerProfit></mat-date-range-picker>
     </mat-form-field>
+    <!-- Affichage de la Chart des profits -->
     <div>
         <canvas id="myChartProfit"></canvas>
     </div>
+    <!-- Affichage du total des profits pour l'intervalle donnée -->
     <p>Montant total du chiffre d'affaire pour la période choisie = {{getTotalProfit()}} €</p>
-    <p>Montant total à prévoir après impôt (30%) = {{getTotalProfit() - (30 * getTotalProfit() / 100)}} €</p>
+    <!-- Affichage du total des profits après déduction des impôts de 30 % -->
+    <p>Montant total à prévoir après impôt (30%) = {{getTotalProfit() < 0 ? getTotalProfit() : getTotalProfit() - (30 * getTotalProfit() / 100)}} €</p>
 </div>
